@@ -18,24 +18,32 @@ CREATE TABLE docentes (
 -- Tabla Alumnos
 CREATE TABLE alumnos (
     carnet INT PRIMARY KEY,
-    nombres VARCHAR(50),
-    apellidos VARCHAR(50)
+    nombres VARCHAR(50) NOT NULL,
+    apellidos VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB;
 
 -- Tabla Mobiliario
 CREATE TABLE mobiliario (
     id INT PRIMARY KEY,
-    nombre VARCHAR(50)
+    nombre VARCHAR(50) NOT NULL
+) ENGINE=InnoDB;
+
+-- Tabla Edificio
+CREATE TABLE edificio (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB;
 
 -- Tabla Salones
 CREATE TABLE salones (
     id INT PRIMARY KEY,
-    nombre VARCHAR(50),
-    capacidad INT,
-    tipo_mobiliario INT,
-    disponible BOOLEAN,
-    FOREIGN KEY (tipo_mobiliario) REFERENCES mobiliario(id)
+    nombre VARCHAR(50) NOT NULL,
+    capacidad INT NOT NULL,
+    tipo_mobiliario INT NOT NULL,
+    edificio_id INT NOT NULL,
+    disponible BOOLEAN NOT NULL,
+    FOREIGN KEY (tipo_mobiliario) REFERENCES mobiliario(id),
+    FOREIGN KEY (edificio_id) REFERENCES edificio(id)
 ) ENGINE=InnoDB;
 
 -- Tabla Carreras
@@ -61,7 +69,7 @@ CREATE TABLE docentes_cursos (
     curso_id INT,
     PRIMARY KEY (docente_id, curso_id),
     FOREIGN KEY (docente_id) REFERENCES docentes(id),
-    FOREIGN KEY (curso_id) REFERENCES cursos(id)
+    FOREIGN KEY (curso_id) REFERENCES cursos(id_curso)
 ) ENGINE=InnoDB;
 
 -- ASIGNACIONES
@@ -83,21 +91,21 @@ CREATE TABLE horario_cursos (
     dias_semana VARCHAR(50),
     periodo_inicio INT NOT NULL,
     periodo_fin INT NOT NULL,
-    FOREIGN KEY (curso_id) REFERENCES cursos(id),
+    FOREIGN KEY (curso_id) REFERENCES cursos(id_curso),
     FOREIGN KEY (docente_id) REFERENCES docentes(id),
     FOREIGN KEY (salon_id) REFERENCES salones(id),
-    FOREIGN KEY (periodo_inicio) REFERENCES periodos(id)
+    FOREIGN KEY (periodo_inicio) REFERENCES periodos(id),
     FOREIGN KEY (periodo_fin) REFERENCES periodos(id)
-);
+) ENGINE=InnoDB;
 
 -- (PRE-ASIGNACIONES)
 -- Tabla Alumnos_Cursos (relación muchos a muchos con atributos extras)
 CREATE TABLE alumnos_cursos (
-    alumno_carnet INT,
-    curso_id INT,
-    semestre INT,
-    ciclo INT,
-    PRIMARY KEY (alumno_carnet, curso_id),
+    alumno_carnet INT NOT NULL,
+    curso_id INT NOT NULL,
+    semestre INT NOT NULL,
+    ciclo INT NOT NULL,
+    PRIMARY KEY (alumno_carnet, curso_id, semestre, ciclo),
     FOREIGN KEY (alumno_carnet) REFERENCES alumnos(carnet),
-    FOREIGN KEY (curso_id) REFERENCES cursos(id)
+    FOREIGN KEY (curso_id) REFERENCES cursos(id_curso)
 ) ENGINE=InnoDB;
