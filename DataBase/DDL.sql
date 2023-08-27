@@ -52,14 +52,28 @@ CREATE TABLE carreras (
     nombre VARCHAR(100)
 ) ENGINE=InnoDB;
 
+-- Tabla de Relación (Carrera-Módulo)
+CREATE TABLE carrera_edificio (
+    carrera_id INT NOT NULL,
+    edificio_id INT NOT NULL,
+    PRIMARY KEY (carrera_id, edificio_id),
+    FOREIGN KEY (carrera_id) REFERENCES carreras(id),
+    FOREIGN KEY (edificio_id) REFERENCES edificio(id)
+);
+
 -- Tabla Cursos
 CREATE TABLE cursos (
     id_curso INT ,
-    id_carrera INT,
     nombre_curso VARCHAR(100),
-    duracion_periodo INT,
-    numero_semestre INT,
-    PRIMARY KEY (id_curso, id_carrera)
+    duracion_periodo INT NOT NULL,
+    numero_semestre INT NOT NULL,
+    PRIMARY KEY (id_curso)
+) ENGINE=InnoDB;
+-- Tabla que relaciona las carreras con los cursos
+CREATE TABLE carrera_cursos (
+    carrera_id INT NOT NULL,
+    curso_id INT NOT NULL,
+    PRIMARY KEY (carrera_id, curso_id)
 ) ENGINE=InnoDB;
 
 -- Tabla Docentes_Cursos (relación muchos a muchos)
@@ -67,6 +81,7 @@ CREATE TABLE cursos (
 CREATE TABLE docentes_cursos (
     docente_id INT,
     curso_id INT,
+    titular boolean default 0,
     PRIMARY KEY (docente_id, curso_id),
     FOREIGN KEY (docente_id) REFERENCES docentes(id),
     FOREIGN KEY (curso_id) REFERENCES cursos(id_curso)
@@ -77,13 +92,20 @@ CREATE TABLE docentes_cursos (
 CREATE TABLE periodos (
     id INT PRIMARY KEY,
     nombre VARCHAR(50),
-    hora_inicio TIME,
-    hora_fin TIME
+    hora_inicio TIME NOT NULL,
+    hora_fin TIME NOT NULL
 ) ENGINE=InnoDB;
+
+CREATE TABLE horarios (
+    id INT PRIMARY KEY NOT NULL,
+    nombre VARCHAR(50) NOT NULL
+) ENGINE=InnoDB;
+
 
 -- Tabla HorarioCursos
 CREATE TABLE horario_cursos (
     id INT PRIMARY KEY NOT NULL,
+    horario_id INT NOT NULL,
     curso_id INT NOT NULL,
     docente_id INT NOT NULL,
     salon_id INT NOT NULL,
@@ -91,12 +113,14 @@ CREATE TABLE horario_cursos (
     dias_semana VARCHAR(50),
     periodo_inicio INT NOT NULL,
     periodo_fin INT NOT NULL,
+    FOREIGN KEY (horario_id) REFERENCES horarios(id),
     FOREIGN KEY (curso_id) REFERENCES cursos(id_curso),
     FOREIGN KEY (docente_id) REFERENCES docentes(id),
     FOREIGN KEY (salon_id) REFERENCES salones(id),
     FOREIGN KEY (periodo_inicio) REFERENCES periodos(id),
     FOREIGN KEY (periodo_fin) REFERENCES periodos(id)
 ) ENGINE=InnoDB;
+
 
 -- (PRE-ASIGNACIONES)
 -- Tabla Alumnos_Cursos (relación muchos a muchos con atributos extras)
