@@ -21,8 +21,9 @@ def SimularHorario(request):
     if request.method == 'GET':
         print("entra")
         arbol = ArbolDecision()
-        data = arbol.cursos_preasignados()
-
+        #data = arbol.cursos_preasignados()
+        data=arbol.simular()
 
         # Crea una respuesta JSON
         return JsonResponse({'mensaje': data})
+        #return JsonResponse({data})

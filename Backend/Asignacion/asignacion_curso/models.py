@@ -119,7 +119,6 @@ class HorarioCursos(models.Model):
 
 
 class Horarios(models.Model):
-    id = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=50)
 
     class Meta:
@@ -141,6 +140,7 @@ class Periodos(models.Model):
     nombre = models.CharField(max_length=50, blank=True, null=True)
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
+    edificio = models.ForeignKey(Edificio, models.DO_NOTHING)
 
     class Meta:
         managed = False

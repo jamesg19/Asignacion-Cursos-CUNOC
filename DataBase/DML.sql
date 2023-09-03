@@ -92,7 +92,7 @@ INSERT INTO cursos (id_curso,nombre_curso,duracion_periodo,numero_semestre) VALU
      (119,'Tecnica Complementaria 1',2,1),
      (177,'Deportes 1',2,1),
      (216,'Quimica 1',1,1),
-     (29,'Social Humanistica 2',1,1),
+     (29,'Social Humanistica 2',1,2),
      (170,'Matematica Basica 2',2,2),
      (2667,'Tecnicas de Investigacion y Estudio',1,2),
      (72,'Fisica Basica',1,2),
@@ -118,7 +118,7 @@ INSERT INTO cursos (id_curso,nombre_curso,duracion_periodo,numero_semestre) VALU
      (2803,'Organizacion de lenguajes y Compiladores 1',1,5),
      (2805,'Estructura De Datos',1,5),
      (2807,'Practica InicialTi',1,5),
-     (2816,'Redes de Computadoras 1',1,1),
+     (2816,'Redes de Computadoras 1',1,7),
      (2813,'Teoria de Sistemas 2',1,7),
      (795,'Investigacion de Operaciones 2',1,7),
      (2814,'Sistemas Operativos 1',1,7),
@@ -147,17 +147,17 @@ INSERT INTO cursos (id_curso,nombre_curso,duracion_periodo,numero_semestre) VALU
      (2740,'Practica final',1,9),
      (2741,'Seminario de investigacion',1,9);
 
-INSERT INTO periodos (id, nombre, hora_inicio, hora_fin)
+INSERT INTO periodos (id, nombre, hora_inicio, hora_fin,edificio_id )
 VALUES
-(1, '1','13:40','14:30'),
-(2, '2','14:30','15:20'),
-(3, '3','15:20','16:10'),
-(4, '4','16:10','17:00'),
-(5, '5','17:00','17:50'),
-(6, '6','17:50','18:40'),
-(7, '7','18:40','19:30'),
-(8, '8','19:30','20:20'),
-(9, '9','20:20','21:10');
+(1, '1','13:40','14:30',1),
+(2, '2','14:30','15:20',1),
+(3, '3','15:20','16:10',1),
+(4, '4','16:10','17:00',1),
+(5, '5','17:00','17:50',1),
+(6, '6','17:50','18:40',1),
+(7, '7','18:40','19:30',1),
+(8, '8','19:30','20:20',1),
+(9, '9','20:20','21:10',1);
 
 
 INSERT INTO alumnos (carnet,nombres,apellidos) VALUES

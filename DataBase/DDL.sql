@@ -93,11 +93,14 @@ CREATE TABLE periodos (
     id INT PRIMARY KEY,
     nombre VARCHAR(50),
     hora_inicio TIME NOT NULL,
-    hora_fin TIME NOT NULL
-) ENGINE=InnoDB;
+    hora_fin TIME NOT NULL,
+    edificio_id INT NOT NULL,
+    FOREIGN KEY (edificio_id) REFERENCES edificio(id)
 
+) ENGINE=InnoDB;
+-- Diferentes horarios
 CREATE TABLE horarios (
-    id INT PRIMARY KEY NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     nombre VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB;
 
