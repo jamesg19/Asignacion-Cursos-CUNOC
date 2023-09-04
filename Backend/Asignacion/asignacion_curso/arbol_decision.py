@@ -1,9 +1,11 @@
 import json
+from django.db.models import Q
 from django.core.serializers import serialize
 from django.db.models import Count, F
 
 from .Objetos.CursoOBJ import CursoOBJ
-from .models import AlumnosCursos, DocentesCursos, Docentes, Cursos, Salones, Periodos, Horarios
+from .Objetos.SalonesOBJ import SalonesOBJ
+from .models import AlumnosCursos, DocentesCursos, Docentes, Cursos, Salones, Periodos, Horarios, HorarioCursos,CursosSalones
 
 class ArbolDecision:
     def __init__(self):
@@ -19,6 +21,8 @@ class ArbolDecision:
         prioridadPorSemestre=False
         prioridadPorDemanda=False
         prioridadPorSemestreActual=True
+
+        elegirSalonExclusivo=True
 
         #1 verifica cursos Pre-asignados
         lista_Cursos_Pre_Asignados=self.cursos_preasignados(semestre,ciclo)
@@ -40,7 +44,7 @@ class ArbolDecision:
 
         #7 simularAsignacionCursos(lista_Cursos_Min_Estudiantes,listaCursosConDocentes,listaSalones)
         self.simularAsignacionCursos(semestre,listaCursosOrdenada, listaCursosConDocentes,
-                                     listaSalones,nombreHorario,listaPeriodosClase)
+                                     listaSalones,nombreHorario,listaPeriodosClase,elegirSalonExclusivo)
 
 
 
@@ -159,20 +163,70 @@ class ArbolDecision:
         return cursos_ordenados
 
     def simularAsignacionCursos(self,semestre,cursosOrdenadosPorPrioridad, listaCursosConDocentes, listaSalones,nombreHorario,
-                                listaPeriodosClase):
+                                listaPeriodosClase,elegirSalonExclusivo):
 
         #guardar nombre del horario(Simulacion)
         horario=Horarios()
         horario.nombre=nombreHorario
         horario.save()
+        horarioCurso=HorarioCursos()
 
 
 
-
-        #Ordenar cursos segun su semestre Priodidad
+        '''
+        Logica de Salones
+        '''
+        #1 Buscar Salon optimo para cursos
         for curso in cursosOrdenadosPorPrioridad:
-            print("Nombre: " +curso.nombre_curso+ " Semestre: "+ str(curso.numero_semestre))
+            print("Nombre: " + curso.nombre_curso + " Semestre: " + str(curso.numero_semestre) + " Asignados: " + str(
+                curso.cantidad_asignados))
+
+            salones=[]
+            haySalonExclusivo=False
+            periodoLibreId=0
+            #2 Buscar si el curso tiene un salon especial
+            if(elegirSalonExclusivo==True):
+                print("     Salon exclusivo")
+                salonesTmp=CursosSalones.objects.values("salon__id","salon__nombre","salon__capacidad","salon__disponible","salon__tipo_mobiliario","curso__id_curso","curso__nombre_curso")\
+                    .filter(curso_id=curso.curso_id)
+                for aula in salonesTmp:
+                    if len(salonesTmp)>0:
+                        haySalonExclusivo=True
+                        aulaTmp = SalonesOBJ(aula["salon__id"], aula["salon__nombre"], aula["salon__capacidad"],
+                                             aula["salon__tipo_mobiliario"])
+                        aulaTmp.disponible = aula["salon__disponible"]
+                        salones.append(aulaTmp)
+                    else:
+                        haySalonExclusivo=False
+
+                    print("     "+aulaTmp.nombre +"\n\n")
+
+
+            else:
+                salones=listaSalones;
+
+
+            #3 Verificar que el Salon Este disponible en el horario
+            for salonItem in salones:
+                #verifica que en los periodos el salon este diponible
+                for periodo in listaPeriodosClase:
+                    horarioTMP=HorarioCursos.objects.values("salon__id","curso__nombre_curso","curso__numero_semestre").\
+                        filter(~Q(periodo_inicio__lte=periodo.id, periodo_fin__gte=periodo.id),
+                               horario_id=horario.id,salon_id=salonItem.id, curso__numero_semestre__ne=)
+                        #filter(horario_id=horario.id,salon_id=salonItem.id , periodo_inicio__ne=periodo.id)
+                    ##falta  comprobarr que no sea del mismo semestre
+                    if len(horarioTMP) == 0:
+
+                        print("Hay libre")
+                        periodoLibreId = periodo.id
+                        break
+                    else:
+
+                        print("No hay libre")
 
 
 
 
+
+
+            print("Termina de evaluar el curso... \n\n\n")

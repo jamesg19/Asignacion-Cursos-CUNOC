@@ -4,3 +4,4 @@ class SalonesOBJ:
         self.nombre = nombre
         self.capacidad = capacidad
         self.mobiliario=mobiliario
+        self.disponible=1;

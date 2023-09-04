@@ -68,7 +68,14 @@ class Cursos(models.Model):
     class Meta:
         managed = False
         db_table = 'cursos'
+class CursosSalones(models.Model):
+    salon = models.OneToOneField('Salones', models.DO_NOTHING, primary_key=True)  # The composite primary key (salon_id, curso_id) found, that is not supported. The first column is selected.
+    curso = models.ForeignKey(Cursos, models.DO_NOTHING)
 
+    class Meta:
+        managed = False
+        db_table = 'cursos_salones'
+        unique_together = (('salon', 'curso'),)
 
 class Docentes(models.Model):
     id = models.IntegerField(primary_key=True)

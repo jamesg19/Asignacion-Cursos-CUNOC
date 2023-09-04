@@ -87,6 +87,16 @@ CREATE TABLE docentes_cursos (
     FOREIGN KEY (curso_id) REFERENCES cursos(id_curso)
 ) ENGINE=InnoDB;
 
+-- Tabla de salones exclusivos para cursos
+CREATE TABLE cursos_salones (
+    salon_id INT,
+    curso_id INT,
+
+    PRIMARY KEY (salon_id, curso_id),
+    FOREIGN KEY (salon_id) REFERENCES salones(id),
+    FOREIGN KEY (curso_id) REFERENCES cursos(id_curso)
+) ENGINE=InnoDB;
+
 -- ASIGNACIONES
 -- Tabla Periodos de cursos
 CREATE TABLE periodos (
@@ -107,7 +117,7 @@ CREATE TABLE horarios (
 
 -- Tabla HorarioCursos
 CREATE TABLE horario_cursos (
-    id INT PRIMARY KEY NOT NULL,
+    id INT PRIMARY KEY AUTO_INCREMENT  NOT NULL,
     horario_id INT NOT NULL,
     curso_id INT NOT NULL,
     docente_id INT NOT NULL,

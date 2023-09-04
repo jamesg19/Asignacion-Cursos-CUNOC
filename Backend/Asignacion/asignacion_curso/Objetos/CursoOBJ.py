@@ -6,6 +6,7 @@ class CursoOBJ:
         self.docentes = []  # Inicializamos una lista vacía para almacenar docentes
         self.cantidad_asignados=cantidad_asignados
         self.numero_semestre=numero_semestre
+        self.salones=[]
 
 
     def to_dict(self):
