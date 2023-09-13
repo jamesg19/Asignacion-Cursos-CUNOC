@@ -1,11 +1,12 @@
 
 class CursoOBJ:
-    def __init__(self, curso_id, nombre_curso,cantidad_asignados,numero_semestre):
+    def __init__(self, curso_id, nombre_curso,cantidad_asignados,numero_semestre,duracion_periodo):
         self.curso_id = curso_id
         self.nombre_curso = nombre_curso
         self.docentes = []  # Inicializamos una lista vacía para almacenar docentes
         self.cantidad_asignados=cantidad_asignados
         self.numero_semestre=numero_semestre
+        self.duracion_periodo=duracion_periodo
         self.salones=[]
 
 
@@ -20,12 +21,16 @@ class CursoOBJ:
         self.docentes.append(docente)
 
     def mostrar_docentes(self):
-        for docente in self.docentes:
-            print(f"Docente ID: {docente.id}")
-            print(f"Nombre: {docente.nombre} {docente.apellido}")
-            print(f"Horario de entrada: {docente.horario_entrada}")
-            print(f"Horario de salida: {docente.horario_salida}")
-            print(f"Titular: {'Sí' if docente.titular == 1 else 'No'}")
+        if(len(self.docentes)!=0):
+            for docente in self.docentes:
+                #print(docente)
+                print(f"Docente ID: {docente.id}")
+                print(f"Nombre: {docente.nombre} {docente.apellido}")
+                print(f"Horario de entrada: {docente.horario_entrada}")
+                print(f"Horario de salida: {docente.horario_salida}")
+                print(f"Titular: {'Sí' if docente.titular == 1 else 'No'}")
+        else:
+            print("     NO HAY DOCENTES")
 
     def agregarDocentes(self,docente):
         self.docentes.append(docente)

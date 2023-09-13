@@ -4158,6 +4158,8 @@ INSERT INTO alumnos_cursos (alumno_carnet,curso_id,semestre,ciclo) VALUES
      (201701073,2741,1,2023),
      (201701074,2741,1,2023),
      (201701075,2741,1,2023);
+
+
 # RELACION DE CURSOS CON DOCENTES (APTOS A IMPARTIR UN CURSO)
 INSERT INTO docentes_cursos (docente_id,curso_id) VALUES
      (35000,2796),
@@ -4262,3 +4264,6 @@ INSERT INTO cursos_salones (salon_id,curso_id) VALUES
     (1,2826),
     (1,2828),
     (15,671);
+
+
+

@@ -120,7 +120,7 @@ CREATE TABLE horario_cursos (
     id INT PRIMARY KEY AUTO_INCREMENT  NOT NULL,
     horario_id INT NOT NULL,
     curso_id INT NOT NULL,
-    docente_id INT NOT NULL,
+    docente_id INT ,
     salon_id INT NOT NULL,
     seccion VARCHAR(5) NOT NULL,
     dias_semana VARCHAR(50),

@@ -1,0 +1,35 @@
+<p>tabla-horario works!</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Horario</th>
+        <ng-container *ngFor="let salones of salonesUnicos">
+            <th >{{ salones.nombre }}</th>
+        </ng-container>
+
+    </tr>
+</thead>
+<tbody>
+
+    <ng-container *ngFor="let periodos of periodosUnicos">
+
+        <tr >
+            <th> {{periodos.hora_inicio}} {{periodos.hora_fin}}</th>
+            <ng-container *ngFor="let salones of salonesUnicos">
+                <ng-container *ngFor="let items of horariosCursos">
+                    <td *ngIf="items.periodo_inicio.id == periodos.id && salones.id == items.salon.id">
+                        <tr>
+                            <th>{{ items.curso.nombre_curso }}</th>
+                            <th  [style.color]="'red'">{{ items.curso.numero_semestre }}</th>
+                        </tr>
+                    </td>
+                </ng-container>
+            </ng-container>
+        </tr>
+    </ng-container>
+
+
+</tbody>
+
+</table>
