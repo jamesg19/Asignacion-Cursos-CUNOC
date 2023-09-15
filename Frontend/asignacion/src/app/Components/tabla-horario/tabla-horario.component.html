@@ -1,9 +1,9 @@
 <p>tabla-horario works!</p>
 
-<table>
+<table class="mat-elevation-z8">
     <thead>
     <tr>
-        <th>Horario</th>
+        <th >Horario</th>
         <ng-container *ngFor="let salones of salonesUnicos">
             <th >{{ salones.nombre }}</th>
         </ng-container>
@@ -19,10 +19,11 @@
             <ng-container *ngFor="let salones of salonesUnicos">
                 <ng-container *ngFor="let items of horariosCursos">
                     <td *ngIf="items.periodo_inicio.id == periodos.id && salones.id == items.salon.id">
-                        <tr>
-                            <th>{{ items.curso.nombre_curso }}</th>
-                            <th  [style.color]="'red'">{{ items.curso.numero_semestre }}</th>
-                        </tr>
+                        
+                        <tr>{{items.curso.id_curso}}</tr>
+                        <tr>{{ items.curso.nombre_curso }}</tr>
+                        <tr  [style.color]="'red'">{{ items.curso.numero_semestre }}</tr>
+                        
                     </td>
                 </ng-container>
             </ng-container>

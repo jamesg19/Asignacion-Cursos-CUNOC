@@ -114,7 +114,7 @@ INSERT INTO cursos (id_curso,nombre_curso,duracion_periodo,numero_semestre) VALU
      (2796,'Introduccion a la programacion 1',1,3),
      (2797,'Logica de Sistemas',1,3),
      (2804,'Organizacion Computacional',1,5),
-     (2802,'Analisis Probabilistico',1,5),
+     (2802,'Analisis Probabilistico',1,6),
      (2803,'Organizacion de lenguajes y Compiladores 1',1,5),
      (2805,'Estructura De Datos',1,5),
      (2807,'Practica InicialTi',1,5),

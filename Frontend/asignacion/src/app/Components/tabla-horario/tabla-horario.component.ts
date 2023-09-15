@@ -6,6 +6,8 @@ import { Salones } from 'src/app/Common/salones';
 import { PeriodosService } from 'src/app/Services/periodos.service';
 import { SalonesService } from 'src/app/Services/salones.service';
 import { ScheduleService } from 'src/app/Services/schedule.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-tabla-horario',
@@ -20,9 +22,12 @@ export class TablaHorarioComponent {
   salonesUnicos:Salones[]=[]
   private listHorariosLibres:HorariosCursos[]=[];
   periodosUnicos:Periodos[]=[]
+
+
   constructor(private scheduleService: ScheduleService, 
     private periodosService:PeriodosService,
-    private salonesService:SalonesService) { }
+    private salonesService:SalonesService,
+    private route: ActivatedRoute) { }
 
 
   ngOnInit() {
@@ -51,8 +56,8 @@ export class TablaHorarioComponent {
 
   private listSchedule() {
     console.log("listSchedule called")
-
-    this.scheduleService.getHorariosCursos(32)
+    let idHorario= +this.route.snapshot.paramMap.get('idHorario');
+    this.scheduleService.getHorariosCursos(10)
       .subscribe(data => {
         this.horariosCursos=data;
         this.procesarDatos();

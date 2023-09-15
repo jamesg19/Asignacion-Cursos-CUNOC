@@ -31,13 +31,14 @@ class AlumnosCursos(models.Model):
 
 
 class CarreraCursos(models.Model):
-    carrera_id = models.IntegerField(primary_key=True)  # The composite primary key (carrera_id, curso_id) found, that is not supported. The first column is selected.
-    curso_id = models.IntegerField()
+    carrera = models.OneToOneField('Carreras', models.DO_NOTHING, primary_key=True)  # The composite primary key (carrera_id, curso_id) found, that is not supported. The first column is selected.
+    curso = models.ForeignKey('Cursos', models.DO_NOTHING)
 
     class Meta:
         managed = False
         db_table = 'carrera_cursos'
-        unique_together = (('carrera_id', 'curso_id'),)
+        unique_together = (('carrera', 'curso'),)
+
 
 
 class CarreraEdificio(models.Model):
@@ -48,6 +49,7 @@ class CarreraEdificio(models.Model):
         managed = False
         db_table = 'carrera_edificio'
         unique_together = (('carrera', 'edificio'),)
+
 
 
 class Carreras(models.Model):
@@ -121,6 +123,7 @@ class HorarioCursos(models.Model):
     dias_semana = models.CharField(max_length=50, blank=True, null=True)
     periodo_inicio = models.ForeignKey('Periodos', models.DO_NOTHING, db_column='periodo_inicio')
     periodo_fin = models.ForeignKey('Periodos', models.DO_NOTHING, db_column='periodo_fin', related_name='horariocursos_periodo_fin_set')
+    carrera = models.ForeignKey(Carreras, models.DO_NOTHING)
 
     class Meta:
         managed = False

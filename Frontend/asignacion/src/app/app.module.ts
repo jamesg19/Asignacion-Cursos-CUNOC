@@ -12,7 +12,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
 //definimos las rutas
 const routes:Routes=[
 
-  {path:'schedule',component: TablaHorarioComponent }
+  {path:'schedule/:idHorario',component: TablaHorarioComponent }
 ];
 
 

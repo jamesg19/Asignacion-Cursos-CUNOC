@@ -7,7 +7,7 @@ from .Objetos.CursoOBJ import CursoOBJ
 from .Objetos.SalonesOBJ import SalonesOBJ
 from .Objetos.DocenteOBJ import DocenteOBJ
 from .models import AlumnosCursos, DocentesCursos, Docentes, Cursos, Salones, Periodos, Horarios, HorarioCursos, \
-    CursosSalones
+    CursosSalones, CarreraCursos, CarreraEdificio
 
 
 class ArbolDecision:
@@ -45,8 +45,10 @@ class ArbolDecision:
         # 6 Ordenar cursos segun prioridad
         listaCursosOrdenada = self.ordenarPorPiroridad(lista_Cursos_Min_Estudiantes, prioridadPorSemestre,
                                                        prioridadPorDemanda, prioridadPorSemestreActual, semestre)
+        # 7 Relacion de Cursos y Carreras
+        #listaCursosCarreas=self.getCursosCarrera(cantMinima,edificioId)
 
-        # 7 simularAsignacionCursos(lista_Cursos_Min_Estudiantes,listaCursosConDocentes,listaSalones)
+        # 8 simularAsignacionCursos(lista_Cursos_Min_Estudiantes,listaCursosConDocentes,listaSalones)
         horario_id = self.simularAsignacionCursos(semestre, listaCursosOrdenada, listaCursosConDocentes,
                                                   listaSalones, nombreHorario, listaPeriodosClase, elegirSalonExclusivo)
 
@@ -216,6 +218,18 @@ class ArbolDecision:
                                           key=lambda curso: (curso.numero_semestre % 2, curso.numero_semestre))
         return cursos_ordenados
 
+    def getCursosCarrera(self,min_estudiantes,edificioId):
+        resultados = CarreraCursos.objects.filter(
+            carrera__id__in=CarreraEdificio.objects.filter(edificio_id=edificioId).values('carrera__id')
+        ).values('curso__id_curso','curso__numero_semestre','carrera__id')
+
+        # Puedes acceder a los campos de ambas tablas en los resultados
+        #for resultado in resultados:
+           # print("Carrera ID:", resultado["carrera__id"])
+            #print("Curso ID:", resultado["curso__id_curso"])
+            #print("Curso Semestre ", resultado["curso__numero_semestre"])
+
+        return resultados
     def simularAsignacionCursos(self, semestre, cursosOrdenadosPorPrioridad, listaCursosConDocentes, listaSalones,
                                 nombreHorario,
                                 listaPeriodosClase, elegirSalonExclusivo):
@@ -246,7 +260,6 @@ class ArbolDecision:
                 salonesTmp = self.getSalonesExclusvos(curso.curso_id)
 
                 if len(salonesTmp) == 0:
-                    print("     salonesTmp ==0")
                     salones = listaSalones;
 
                 for aula in salonesTmp:
@@ -262,60 +275,63 @@ class ArbolDecision:
                         print("     NO TIENE exclusivo---")
                         haySalonExclusivo = False
 
-
             else:
                 print("     Salon exclusivo descativado")
-                print("Entra en else " + str(len(salones)))
+                #print("Entra en else " + str(len(salones)))
                 salones = listaSalones;
 
             # 3 Verificar que el Salon Este disponible en el horario
-            print("Cantidad de salones: " + str(len(salones)))
+            #print("Cantidad de salones: " + str(len(salones)))
             periodoLibreInicioId, periodoLibreFinId, salonLibreId = self.buscarHorarioSalon(listaPeriodosClase, salones,
                                                                                             horario, curso)
-
-            id_docente_disponible = self.buscarDocente(listaCursosConDocentes, curso, periodoLibreInicioId, horario.id)
+            #4 Verifica que no exista
+            id_docente_disponible = self.buscarDocente(listaCursosConDocentes, curso, periodoLibreInicioId, horario.id,salonLibreId)
             if id_docente_disponible == None:
                 id_docente_disponible = None
+
             if salonLibreId != 0:
 
+                CarreraCursoActual = CarreraCursos.objects.filter(curso__id_curso=curso.curso_id).values('carrera__id')
+                carrera_id = 0
+
+                for item in CarreraCursoActual:
+                    carrera_id=item['carrera__id']
+                    break
+
                 self.guardarHorarioSalonCursoDocente(horario.id, curso.curso_id, id_docente_disponible, salonLibreId,
-                                                     "A", periodoLibreInicioId, periodoLibreFinId)
+                                                     "A", periodoLibreInicioId, periodoLibreFinId,carrera_id)
                 print("Termina de evaluar el curso... \n\n\n")
             else:
                 print("No se pudo asignar")
 
         return horario.id
 
-    def buscarDocente(self, listaCursosConDocentes, curso, periodoidCurso, horarioId):
-        print("Entra a buscar Docente")
-        print(f" Entra en ID: {curso.curso_id} curso: {curso.nombre_curso}")
+    def buscarDocente(self, listaCursosConDocentes, curso, periodoidCurso, horarioId,salonId):
+        #print("Entra a buscar Docente")
+        #print(f" Entra en ID: {curso.curso_id} curso: {curso.nombre_curso}")
         for cursoItem in listaCursosConDocentes:
-
             if cursoItem.curso_id == curso.curso_id:
-
                 # Analiza si tiene docentes
                 cantidadDocentes = len(cursoItem.docentes)
-
                 if cantidadDocentes > 0:
-
                     for docente in cursoItem.docentes:
                         # verifica que este disponible
                         docenteDisponible = self.verificaDocenteDisponible(docente, periodoidCurso, horarioId,
-                                                                           curso.duracion_periodo)
+                                                                           curso.duracion_periodo, salonId)
                         if docenteDisponible:
                             return docente.id
-
 
                 else:
                     # No tiene ningun docente
                     return None
 
-    def verificaDocenteDisponible(self, docente, periodoidCurso, horarioId, duracion_curso):
+    def verificaDocenteDisponible(self, docente, periodoidCurso, horarioId, duracion_curso,salonId):
 
         horarioTMP = HorarioCursos.objects.values("salon__id", "curso__nombre_curso",
                                                   "curso__numero_semestre"). \
             filter(Q(periodo_inicio__gte=periodoidCurso, periodo_fin__lte=(periodoidCurso + duracion_curso)),
-                   horario_id=horarioId, salon_id=periodoidCurso, docente_id=docente.id)
+                   horario_id=horarioId, salon_id=salonId, docente_id=docente.id)
+
 
         if len(horarioTMP) == 0:
             print("El DOCENTE TIENE LIBRE A ESA HORA :)")
@@ -323,7 +339,7 @@ class ArbolDecision:
         else:
             print("Esta ocupado...")
             return False
-
+##mejora en iteracion de salones version 2.0 +
     def buscarHorarioSalon(self, listaPeriodosClase, salones, horario, curso):
         periodoLibreInicioId = 0
         periodoLibreFinId = 0
@@ -332,7 +348,7 @@ class ArbolDecision:
         for salonItem in salones:
 
             if self.Existe_Curso_en_Cursos_Salones(salonItem.id, curso.curso_id):
-                print("Continue: salon:"+str(salonItem.id)+" curso:"+str(curso.curso_id)+" Nombre "+curso.nombre_curso)
+                #print("Continue: salon:"+str(salonItem.id)+" curso:"+str(curso.curso_id)+" Nombre "+curso.nombre_curso)
                 continue
 
             else:
@@ -340,36 +356,80 @@ class ArbolDecision:
 
             flagSalon = False
 
-            # verifica que los periodos el salon este diponible
-            print("Entra1-----------")
+            # verifica que los periodos y el salon este diponible
+            #print("Entra1-----------")
             for periodo in listaPeriodosClase:
-                print("Entra2-----------")
+                #print("Entra2-----------")
                 horarioTMP = HorarioCursos.objects.values("salon__id", "curso__nombre_curso",
                                                           "curso__numero_semestre"). \
-                    filter(Q(periodo_inicio__gte=periodo.id, periodo_fin__lte=(periodo.id + (curso.duracion_periodo-1))),
+                    filter(Q(periodo_inicio=periodo.id, periodo_fin=periodo.id) |
+                           Q( periodo_fin=(periodo.id ), periodo_inicio__lte=periodo.id),
                            horario_id=horario.id, salon_id=salonItem.id)
+                #Verifica que en el periodo no exista un curso del mismo semestre en los salones
+
 
                 # time.sleep(0.009)
                 if len(horarioTMP) == 0:
                     print("Hay libre")
-                    periodoLibreInicioId = periodo.id
-
-                    periodoLibreFinId = (periodo.id + curso.duracion_periodo - 1)
-                    salonLibreId = salonItem.id
-                    flagSalon = True
-                    break
+                    if self.verificaCursosMismoSemestre(curso.numero_semestre, periodo.id, horario.id,curso.curso_id):
+                        continue
+                    else:
+                        periodoLibreInicioId = periodo.id
+                        periodoLibreFinId = (periodo.id + curso.duracion_periodo - 1)
+                        salonLibreId = salonItem.id
+                        flagSalon = True
+                        break
                 else:
                     periodoLibreInicioId = 0
-                    print("NO HAY LIBRE: ")
-                    print("Salon: " + str(salonItem.id) + " Periodo Inicio: " + str(
-                        periodo.id) + " Periodo Fin: " + str(periodo.id + curso.duracion_periodo - 1))
+                    #print("NO HAY LIBRE: ")
+                    #print("Salon: " + str(salonItem.id) + " Periodo Inicio: " + str(
+                        #periodo.id) + " Periodo Fin: " + str(periodo.id + curso.duracion_periodo - 1))
 
             if flagSalon:
                 break
         return periodoLibreInicioId, periodoLibreFinId, salonLibreId
+    def verificaCursosMismoSemestre(self,numero_semestre,periodoId,horarioId, cursoId):
+        horarioTMP = HorarioCursos.objects.values("salon__id", "curso__nombre_curso",
+                                                  "curso__numero_semestre","curso__id_curso", "carrera__id"). \
+            filter(curso__numero_semestre=numero_semestre, periodo_inicio__id=periodoId,
+                   horario_id=horarioId)
+        if len(horarioTMP) == 0:
+            return False;
+        else:
+            print(f"Hay del mismo semestre en el periodo:{periodoId}, semestre: {numero_semestre}")
+
+            # Los cursos que hay en el mismo periodo
+            for horarios in horarioTMP:
+                print(horarios)
+                idCursoenHorario = horarios['curso__id_curso']
+                idCarreraHorario= horarios['carrera__id']
+
+                #CarreraCursoHorario= CarreraCursos.objects.filter(curso__id_curso=idCursoenHorario).values('curso__id_curso')
+
+                idCursoActual = cursoId
+                CarreraCursoActual = CarreraCursos.objects.filter(curso__id_curso=idCursoActual).values('curso__id_curso','carrera__id')
+
+                for item in CarreraCursoActual:
+
+                    if item['carrera__id'] == idCarreraHorario:
+                        print("Cancela el curso debido a que es de la misma carrera o comparte carrera")
+                        return True
+
+                return False
+                # print("Carrera ID:", resultado["carrera__id"])
+                # print("Curso ID:", resultado["curso__id_curso"])
+                # print("Curso Semestre ", resultado["curso__numero_semestre"])
+
+
+
+
+
+
+            return True
+
 
     def guardarHorarioSalonCursoDocente(self, horario_id, curso_id, docente_id, salon_id, seccion,
-                                        periodo_inicio, periodo_fin):
+                                        periodo_inicio, periodo_fin,carrera_id):
         print("Guardando horario")
         print("horario_id:", horario_id)
         print("curso_id:", curso_id)
@@ -378,7 +438,7 @@ class ArbolDecision:
         print("seccion:", seccion)
         print("periodo_inicio:", periodo_inicio)
         print("periodo_fin:", periodo_fin)
-
+        print("carrera_id:", carrera_id)
         horario_curso_salon_docente = HorarioCursos()
         horario_curso_salon_docente.horario_id = horario_id
         horario_curso_salon_docente.curso_id = curso_id
@@ -387,5 +447,6 @@ class ArbolDecision:
         horario_curso_salon_docente.seccion = seccion
         horario_curso_salon_docente.periodo_inicio_id = periodo_inicio
         horario_curso_salon_docente.periodo_fin_id = periodo_fin
+        horario_curso_salon_docente.carrera_id=carrera_id
 
         horario_curso_salon_docente.save()
