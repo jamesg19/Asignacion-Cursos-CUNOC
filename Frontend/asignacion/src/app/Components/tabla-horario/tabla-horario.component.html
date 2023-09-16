@@ -1,11 +1,14 @@
-<p>tabla-horario works!</p>
 
-<table class="mat-elevation-z8">
+<button (click)="descargarPDF()">Descargar Horario en PDF</button>
+<table class="table table-dark" #tablaHTML>
     <thead>
     <tr>
         <th >Horario</th>
         <ng-container *ngFor="let salones of salonesUnicos">
-            <th >{{ salones.nombre }}</th>
+            <th class="custom-tooltip" >{{ salones?.nombre }}
+                <span  class="tooltip-text">{{ salones?.nombre }}<br> Eficacia: {{salones?.eficacia}}%</span>
+                
+            </th>
         </ng-container>
 
     </tr>
@@ -15,14 +18,20 @@
     <ng-container *ngFor="let periodos of periodosUnicos">
 
         <tr >
-            <th> {{periodos.hora_inicio}} {{periodos.hora_fin}}</th>
+            <th class="custom-tooltip"> {{periodos.hora_inicio}} {{periodos.hora_fin}}
+                <span  class="tooltip-text">
+                    Eficacia: {{periodos.eficacia}}%
+                </span>
+            </th>
             <ng-container *ngFor="let salones of salonesUnicos">
                 <ng-container *ngFor="let items of horariosCursos">
-                    <td *ngIf="items.periodo_inicio.id == periodos.id && salones.id == items.salon.id">
+                    <td [ngClass]="getClassForNombre(items.carrera?.id)" *ngIf="items.periodo_inicio.id == periodos.id && salones.id == items.salon.id">
                         
-                        <tr>{{items.curso.id_curso}}</tr>
-                        <tr>{{ items.curso.nombre_curso }}</tr>
-                        <tr  [style.color]="'red'">{{ items.curso.numero_semestre }}</tr>
+                        <tr [style.color]="'green'" *ngIf="items.curso?.id_curso !=0">{{items.curso?.id_curso}}</tr>
+                        <tr  [style.color]="'red'">{{ items.curso?.numero_semestre }}</tr>
+                        <tr>{{ items.curso?.nombre_curso }}</tr>
+                        <tr [style.color]="'orange'">{{ items.docente?.nombre }} {{ items.docente?.apellido }}</tr>
+                        
                         
                     </td>
                 </ng-container>

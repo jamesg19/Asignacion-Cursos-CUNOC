@@ -5,5 +5,6 @@ export class Periodos {
     nombre:string;
     hora_inicio:Date;
     hora_fin:Date;
-    edificio:Edificio
+    edificio:Edificio;
+    eficacia:number;
 }

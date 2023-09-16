@@ -1,0 +1,58 @@
+  .custom-tooltip {
+    position: relative;
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+  }
+  
+  .tooltip-text {
+    visibility: hidden;
+    width: 100px;
+    
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 1%;
+    left: 90%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    
+  }
+  
+  .custom-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  
+  .punto_carrera_industrial {
+    position: relative;
+  }
+  .punto_carrera_sistemas {
+    position: relative;
+  }
+  
+  .punto_carrera_sistemas::after {
+    content: ''; /* Contenido vacío para el punto */
+    width: 10px; /* Ancho del punto */
+    height: 10px; /* Altura del punto */
+    background-color: orange; /* Color amarillo del punto */
+    border-radius: 75%; /* Hace que el punto sea circular */
+    position: absolute; /* Posición absoluta en relación con el th */
+    top: 0; /* Posiciona en la parte superior */
+    right: 0; /* Posiciona en la parte derecha */
+  }
+  
+  .punto_carrera_industrial::after {
+    content: ''; /* Contenido vacío para el punto */
+    width: 10px; /* Ancho del punto */
+    height: 10px; /* Altura del punto */
+    background-color: purple; /* Color amarillo del punto */
+    border-radius: 75%; /* Hace que el punto sea circular */
+    position: absolute; /* Posición absoluta en relación con el th */
+    top: 0; /* Posiciona en la parte superior */
+    right: 0; /* Posiciona en la parte derecha */
+  }

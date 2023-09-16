@@ -1,7 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TablaHorarioComponent } from './Components/tabla-horario/tabla-horario.component';
+import { ProcessComponent } from './Components/process/process.component';
+import { ParametrosComponent } from './Components/parametros/parametros.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {path:'schedule/:idHorario',component: TablaHorarioComponent },
+  {path:'parametros',component: ParametrosComponent },
+  {path:'',component: ProcessComponent }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

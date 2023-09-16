@@ -7,4 +7,6 @@ export class Salones {
     tipo_mobiliario: Mobiliario;
     //edificio_id
     disponible: boolean;
+    eficacia:number;
+
 }

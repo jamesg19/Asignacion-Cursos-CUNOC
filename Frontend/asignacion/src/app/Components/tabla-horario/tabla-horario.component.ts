@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Cursos } from 'src/app/Common/cursos';
 import { HorariosCursos } from 'src/app/Common/horarios-cursos';
 import { Periodos } from 'src/app/Common/periodos';
@@ -7,6 +7,10 @@ import { PeriodosService } from 'src/app/Services/periodos.service';
 import { SalonesService } from 'src/app/Services/salones.service';
 import { ScheduleService } from 'src/app/Services/schedule.service';
 import { ActivatedRoute } from '@angular/router';
+import { Horarios } from 'src/app/Common/horarios';
+import html2canvas from 'html2canvas';
+import jspdf from 'jspdf';
+import { Docentes } from 'src/app/Common/docentes';
 
 
 @Component({
@@ -15,7 +19,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./tabla-horario.component.css']
 })
 export class TablaHorarioComponent {
-
+  @ViewChild('tablaHTML') tablaHTML: ElementRef;
 
 
   horariosCursos:HorariosCursos[]=[]
@@ -35,7 +39,20 @@ export class TablaHorarioComponent {
       this.listSalones();
       this.listSchedule();
 
+      
+
     
+  }
+  getClassForNombre(idCarrera: number): string {
+    if (idCarrera === 5) {
+      return 'punto_carrera_sistemas';
+    } 
+    else if (idCarrera === 2)  {
+      return 'punto_carrera_industrial';
+    } 
+    else{
+      return ''
+    }
   }
 
   private listPeriodos() {
@@ -50,23 +67,50 @@ export class TablaHorarioComponent {
 
     this.salonesService.getSalonesEdificio(1).subscribe(data =>{
       this.salonesUnicos=data;
+      
     });
+    
 
+  }
+
+  private eficacia(){
+
+    //salones
+    for (let i =0;i<this.salonesUnicos.length;i++){
+  
+      let salonesOcupados=this.horariosCursos.filter(horario => horario.salon.id === this.salonesUnicos[i].id && horario.id !== 0 )
+      
+      console.log(this.salonesUnicos[i].nombre);
+
+      this.salonesUnicos[i].eficacia= (  (salonesOcupados.length)/(this.periodosUnicos.length)  )*100
+      this.salonesUnicos[i].eficacia.toFixed(2)
+    }
+
+    //periodos
+    for (let i =0;i<this.periodosUnicos.length;i++){
+      const periodosOcupados=this.horariosCursos.filter(horario => horario.periodo_inicio.id === this.periodosUnicos[i].id && horario.id !== 0)
+
+      this.periodosUnicos[i].eficacia= (  (periodosOcupados.length)/(this.salonesUnicos.length)  )*100
+      this.periodosUnicos[i].eficacia.toFixed(2)
+    }
+    console.log("sale")
   }
 
   private listSchedule() {
     console.log("listSchedule called")
     let idHorario= +this.route.snapshot.paramMap.get('idHorario');
-    this.scheduleService.getHorariosCursos(10)
+    this.scheduleService.getHorariosCursos(idHorario)
       .subscribe(data => {
         this.horariosCursos=data;
+        //console.log("HorariosCursos: "+this.horariosCursos);
         this.procesarDatos();
+        this.eficacia();
       });
 
   }
 
 
-  procesarDatos(){
+  private procesarDatos(){
     
     //Eje X
     for (let i = 0; i < this.salonesUnicos.length; i++) {
@@ -82,7 +126,7 @@ export class TablaHorarioComponent {
             //console.log("   Hay clase en: \nSalon: "+this.salonesUnicos[i].id+" Periodo: "+this.periodosUnicos[j].id)
           }else{
             //imprimir salon libre en i y peiodo libre en j
-            console.log("   Hay libre en: \nSalon: "+this.salonesUnicos[i].id+" Periodo: "+this.periodosUnicos[j].id)
+            //console.log("   Hay libre en: \nSalon: "+this.salonesUnicos[i].id+" Periodo: "+this.periodosUnicos[j].id)
             this.crearLibre(i,j);
           }
           /*
@@ -112,18 +156,22 @@ export class TablaHorarioComponent {
 
   private crearLibre(i,j){
     
-      console.log("Entra en periodo libre");
+      //console.log("Entra en periodo libre");
 
       let periodo_inicio:Periodos=new Periodos();
       periodo_inicio.id=this.periodosUnicos[j].id;
 
       let salon:Salones=new Salones();
       salon.id=this.salonesUnicos[i].id;
+      console.log("Salon: "+salon.id+" Periodo: "+periodo_inicio.id+"")
 
       let curso:Cursos=new Cursos();
       curso.id_curso=0;
       curso.nombre_curso="";
       curso.duracion_periodo=1;
+
+      let docente:Docentes=new Docentes();
+      docente.id=0;
       
       //crear objeto horarioCursos
       let horario:HorariosCursos=new HorariosCursos();
@@ -141,7 +189,21 @@ export class TablaHorarioComponent {
 
 
 
+  descargarPDF() {
+    const content: HTMLElement = this.tablaHTML.nativeElement;
 
+    html2canvas(content).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jspdf('l', 'mm', 'legal');
+      
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('tabla.pdf');
+    });
+  }
 
 
 
@@ -153,5 +215,6 @@ export class TablaHorarioComponent {
       
     };
   }
+  
 
 }

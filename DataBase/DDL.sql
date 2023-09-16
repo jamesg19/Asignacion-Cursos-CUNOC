@@ -129,6 +129,7 @@ CREATE TABLE horario_cursos (
     periodo_inicio INT NOT NULL,
     periodo_fin INT NOT NULL,
     carrera_id INT NOT NULL,
+
     FOREIGN KEY (horario_id) REFERENCES horarios(id),
     FOREIGN KEY (curso_id) REFERENCES cursos(id_curso),
     FOREIGN KEY (docente_id) REFERENCES docentes(id),

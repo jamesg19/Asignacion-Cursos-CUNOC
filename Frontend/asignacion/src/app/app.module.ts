@@ -6,24 +6,24 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TablaHorarioComponent } from './Components/tabla-horario/tabla-horario.component';
 import { NavbarComponent } from './Components/navbar/navbar.component';
-import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import { ProcessComponent } from './Components/process/process.component';
+import { ParametrosComponent } from './Components/parametros/parametros.component'
 
 
-//definimos las rutas
-const routes:Routes=[
 
-  {path:'schedule/:idHorario',component: TablaHorarioComponent }
-];
 
 
 @NgModule({
   declarations: [
     AppComponent,
     TablaHorarioComponent,
-    NavbarComponent
+    NavbarComponent,
+    ProcessComponent,
+    ParametrosComponent
   ],
   imports: [
-    RouterModule.forRoot(routes),
+
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,

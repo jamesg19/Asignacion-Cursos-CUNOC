@@ -1,3 +1,4 @@
+import { Carrera } from "./carrera";
 import { Cursos } from "./cursos";
 import { Docentes } from "./docentes";
 import { Horarios } from "./horarios";
@@ -11,6 +12,7 @@ export class HorariosCursos {
     docente: Docentes;
     salon: Salones;
     seccion: string;
+    carrera:Carrera;
     dias_semana: string;
     periodo_inicio: Periodos;
     periodo_fin: Periodos;
