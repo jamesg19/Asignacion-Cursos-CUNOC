@@ -88,6 +88,9 @@ class Docentes(models.Model):
     apellido = models.CharField(max_length=50, blank=True, null=True)
     horario_entrada = models.TimeField(blank=True, null=True)
     horario_salida = models.TimeField(blank=True, null=True)
+    periodo_inicio = models.ForeignKey('Periodos', models.DO_NOTHING, db_column='periodo_inicio', blank=True, null=True)
+    periodo_fin = models.ForeignKey('Periodos', models.DO_NOTHING, db_column='periodo_fin',
+                                    related_name='docentes_periodo_fin_set', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -132,6 +135,15 @@ class HorarioCursos(models.Model):
 
 class Horarios(models.Model):
     nombre = models.CharField(max_length=50)
+    semestre = models.IntegerField()
+    ciclo = models.IntegerField()
+    cantidad_minima = models.IntegerField()
+    edificio_id = models.IntegerField()
+    prioridad_semestre_ascendente = models.IntegerField(blank=True, null=True)
+    prioridad_semestre_descendente = models.IntegerField(blank=True, null=True)
+    prioridad_demanda = models.IntegerField(blank=True, null=True)
+    prioridad_semestre_actual = models.IntegerField(blank=True, null=True)
+    docente_horariolaboral = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False

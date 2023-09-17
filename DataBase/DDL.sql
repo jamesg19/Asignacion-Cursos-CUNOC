@@ -6,14 +6,7 @@ CREATE SCHEMA `CUNOC`;
 -- Usar la base de datos
 USE CUNOC;
 
--- Tabla Docentes
-CREATE TABLE docentes (
-    id INT PRIMARY KEY,
-    nombre VARCHAR(50),
-    apellido VARCHAR(50),
-    horario_entrada TIME,
-    horario_salida TIME
-) ENGINE=InnoDB;
+
 
 -- Tabla Alumnos
 CREATE TABLE alumnos (
@@ -32,6 +25,29 @@ CREATE TABLE mobiliario (
 CREATE TABLE edificio (
     id INT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL
+) ENGINE=InnoDB;
+-- Tabla Periodos de cursos
+CREATE TABLE periodos (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(50),
+    hora_inicio TIME NOT NULL,
+    hora_fin TIME NOT NULL,
+    edificio_id INT NOT NULL,
+    FOREIGN KEY (edificio_id) REFERENCES edificio(id)
+
+) ENGINE=InnoDB;
+
+-- Tabla Docentes
+CREATE TABLE docentes (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(50),
+    apellido VARCHAR(50),
+    horario_entrada TIME,
+    horario_salida TIME,
+    periodo_inicio INT,
+    periodo_fin INT,
+    FOREIGN KEY (periodo_inicio) REFERENCES periodos(id),
+    FOREIGN KEY (periodo_fin) REFERENCES periodos(id)
 ) ENGINE=InnoDB;
 
 -- Tabla Salones
@@ -100,20 +116,35 @@ CREATE TABLE cursos_salones (
 ) ENGINE=InnoDB;
 
 -- ASIGNACIONES
--- Tabla Periodos de cursos
-CREATE TABLE periodos (
-    id INT PRIMARY KEY,
-    nombre VARCHAR(50),
-    hora_inicio TIME NOT NULL,
-    hora_fin TIME NOT NULL,
-    edificio_id INT NOT NULL,
-    FOREIGN KEY (edificio_id) REFERENCES edificio(id)
 
-) ENGINE=InnoDB;
 -- Diferentes horarios
 CREATE TABLE horarios (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    nombre VARCHAR(50) NOT NULL
+    nombre VARCHAR(50) NOT NULL,
+    semestre INT NOT NULL,
+    ciclo INT NOT NULL,
+    cantidad_minima INT NOT NULL,
+    edificio_id INT NOT NULL,
+
+    prioridad_semestre_ascendente BOOLEAN,
+    prioridad_semestre_descendente BOOLEAN,
+    prioridad_demanda BOOLEAN,
+    prioridad_semestre_actual BOOLEAN,
+
+    docente_horariolaboral BOOLEAN
+
+
+
+) ENGINE=InnoDB;
+
+CREATE TABLE reportes (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    horario_id INT NOT NULL,
+    curso_id INT ,
+    docente_id INT ,
+    descripcion VARCHAR(100) NOT NULL,
+    FOREIGN KEY (curso_id) REFERENCES cursos(id_curso),
+    FOREIGN KEY (docente_id) REFERENCES docentes(id)
 ) ENGINE=InnoDB;
 
 

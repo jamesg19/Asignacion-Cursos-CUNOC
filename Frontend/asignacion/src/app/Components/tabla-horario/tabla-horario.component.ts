@@ -91,7 +91,7 @@ export class TablaHorarioComponent {
       const periodosOcupados=this.horariosCursos.filter(horario => horario.periodo_inicio.id === this.periodosUnicos[i].id && horario.id !== 0)
 
       this.periodosUnicos[i].eficacia= (  (periodosOcupados.length)/(this.salonesUnicos.length)  )*100
-      this.periodosUnicos[i].eficacia.toFixed(2)
+      
     }
     console.log("sale")
   }

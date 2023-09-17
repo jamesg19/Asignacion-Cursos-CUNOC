@@ -6,7 +6,7 @@
         <th >Horario</th>
         <ng-container *ngFor="let salones of salonesUnicos">
             <th class="custom-tooltip" >{{ salones?.nombre }}
-                <span  class="tooltip-text">{{ salones?.nombre }}<br> Eficacia: {{salones?.eficacia}}%</span>
+                <span  class="tooltip-text">{{ salones?.nombre }}<br>{{ salones?.capacidad }}<br> Eficacia: {{salones?.eficacia.toFixed(2)}}%</span>
                 
             </th>
         </ng-container>
@@ -20,7 +20,7 @@
         <tr >
             <th class="custom-tooltip"> {{periodos.hora_inicio}} {{periodos.hora_fin}}
                 <span  class="tooltip-text">
-                    Eficacia: {{periodos.eficacia}}%
+                    Eficacia: {{periodos.eficacia.toFixed(2)}}%
                 </span>
             </th>
             <ng-container *ngFor="let salones of salonesUnicos">
