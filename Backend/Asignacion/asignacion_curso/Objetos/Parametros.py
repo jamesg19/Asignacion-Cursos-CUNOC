@@ -1,16 +1,14 @@
 class ParemetrosOBJ:
 
-
-    def __init__(self,nombreHorario, semestre, ciclo, cantMinima,edificioId,
+    def __init__(self, nombreHorario, semestre, ciclo, cantMinima, edificioId,
                  prioridadPorSemestreAscendente, prioridadPorSemestreDescendente,
                  prioridadPorDemanda, prioridadPorSemestreActual, elegirSalonExclusivo,
-                 docentesenHorarioLaboral,capacidadSalon ):
+                 docentesenHorarioLaboral, capacidadSalon):
         self.nombreHorario = nombreHorario
-        self.semestre=semestre
+        self.semestre = semestre
         self.ciclo = ciclo
         self.cantMinima = cantMinima
         self.edificioId = edificioId
-
 
         self.prioridadPorSemestreAscendente = prioridadPorSemestreAscendente
         self.prioridadPorSemestreDescendente = prioridadPorSemestreDescendente
