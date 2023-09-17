@@ -10,11 +10,11 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from rest_framework import generics
-from .models import AlumnosCursos, HorarioCursos, Periodos, Salones
+from .models import AlumnosCursos, HorarioCursos, Periodos, Salones, Horarios
 from .arbol_decision import ArbolDecision
 from .Schedule import Schedule
 
-from .serializer import AlumnosCursosSerializer, HorarioCursosSerializer, PeriodosSerializer, SalonesSerializer
+from .serializer import AlumnosCursosSerializer, HorarioCursosSerializer, PeriodosSerializer, SalonesSerializer, HorariosSerializer
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -64,6 +64,17 @@ class SalonesEdificio(generics.ListCreateAPIView):
         edificio_id = self.kwargs.get('edificio_id')
         print(edificio_id)
         queryset = Salones.objects.filter(edificio_id=edificio_id,disponible=1)
+        print(queryset)
+        return queryset
+
+
+class HorariosParametros(generics.ListCreateAPIView):
+    serializer_class = HorariosSerializer
+    def get_queryset(self):
+        print("ENTRA EN parametros...")
+        horario_id = self.kwargs.get('horario_id')
+        print(horario_id)
+        queryset = Horarios.objects.filter(id=horario_id)
         print(queryset)
         return queryset
 

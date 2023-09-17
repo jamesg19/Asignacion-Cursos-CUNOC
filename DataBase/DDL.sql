@@ -131,7 +131,10 @@ CREATE TABLE horarios (
     prioridad_demanda BOOLEAN,
     prioridad_semestre_actual BOOLEAN,
 
+
+    elegir_salon_exclusivo BOOLEAN,
     docente_horariolaboral BOOLEAN
+
 
 
 

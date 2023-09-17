@@ -11,6 +11,7 @@ import { Horarios } from 'src/app/Common/horarios';
 import html2canvas from 'html2canvas';
 import jspdf from 'jspdf';
 import { Docentes } from 'src/app/Common/docentes';
+import { ParametrosService } from 'src/app/Services/parametros.service';
 
 
 @Component({
@@ -21,27 +22,41 @@ import { Docentes } from 'src/app/Common/docentes';
 export class TablaHorarioComponent {
   @ViewChild('tablaHTML') tablaHTML: ElementRef;
 
-
+  horario:Horarios;
   horariosCursos:HorariosCursos[]=[]
   salonesUnicos:Salones[]=[]
   private listHorariosLibres:HorariosCursos[]=[];
   periodosUnicos:Periodos[]=[]
+  idHorario: number 
+  
 
 
   constructor(private scheduleService: ScheduleService, 
     private periodosService:PeriodosService,
     private salonesService:SalonesService,
+    private parametrosService:ParametrosService,
     private route: ActivatedRoute) { }
 
 
   ngOnInit() {
+      this.idHorario= +this.route.snapshot.paramMap.get('idHorario');
       this.listPeriodos();
       this.listSalones();
+      this.listParametros();
       this.listSchedule();
 
       
 
     
+  }
+  private listParametros(){
+    console.log("listParametros called");
+    this.parametrosService.getParametrosHorario(this.idHorario)
+      .subscribe(data => {
+        console.log(data);   
+        this.horario=data;
+      });
+
   }
   getClassForNombre(idCarrera: number): string {
     if (idCarrera === 5) {
@@ -98,8 +113,8 @@ export class TablaHorarioComponent {
 
   private listSchedule() {
     console.log("listSchedule called")
-    let idHorario= +this.route.snapshot.paramMap.get('idHorario');
-    this.scheduleService.getHorariosCursos(idHorario)
+    
+    this.scheduleService.getHorariosCursos(this.idHorario)
       .subscribe(data => {
         this.horariosCursos=data;
         //console.log("HorariosCursos: "+this.horariosCursos);
@@ -163,7 +178,7 @@ export class TablaHorarioComponent {
 
       let salon:Salones=new Salones();
       salon.id=this.salonesUnicos[i].id;
-      console.log("Salon: "+salon.id+" Periodo: "+periodo_inicio.id+"")
+      //console.log("Salon: "+salon.id+" Periodo: "+periodo_inicio.id+"")
 
       let curso:Cursos=new Cursos();
       curso.id_curso=0;

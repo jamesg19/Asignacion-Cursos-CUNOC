@@ -1,8 +1,24 @@
 
-<button (click)="descargarPDF()">Descargar Horario en PDF</button>
+<div class="row" aling="center">   
+    <div class="column">
+    
+    </div>
+    <div class="column">
+        
+        <h2>&nbsp; &nbsp; &nbsp; Nombre: {{horario[0]?.nombre}}&nbsp; &nbsp; &nbsp;</h2>
+        
+    </div>
+    <div class="column">
+        <button class="btn btn-warning" (click)="descargarPDF()">Descargar Horario en PDF</button>
+ 
+    </div>
+</div>
+
 <table class="table table-dark" #tablaHTML>
     <thead>
+        
     <tr>
+        
         <th >Horario</th>
         <ng-container *ngFor="let salones of salonesUnicos">
             <th class="custom-tooltip" >{{ salones?.nombre }}

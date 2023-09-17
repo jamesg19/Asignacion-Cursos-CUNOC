@@ -143,6 +143,7 @@ class Horarios(models.Model):
     prioridad_semestre_descendente = models.IntegerField(blank=True, null=True)
     prioridad_demanda = models.IntegerField(blank=True, null=True)
     prioridad_semestre_actual = models.IntegerField(blank=True, null=True)
+    elegir_salon_exclusivo = models.IntegerField(blank=True, null=True)
     docente_horariolaboral = models.IntegerField(blank=True, null=True)
 
     class Meta:

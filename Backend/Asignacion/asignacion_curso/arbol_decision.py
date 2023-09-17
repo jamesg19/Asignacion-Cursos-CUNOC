@@ -273,12 +273,12 @@ class ArbolDecision:
         horario.ciclo = parametros.ciclo
         horario.cantidad_minima = parametros.cantMinima
         horario.edificio_id = parametros.edificioId
-        horario.prioridadPorSemestreAscendente = parametros.prioridadPorSemestreAscendente
-        horario.prioridadPorSemestreDescendente = parametros.prioridadPorSemestreDescendente
-        horario.prioridadPorDemanda = parametros.prioridadPorDemanda
-        horario.prioridadPorSemestreActual = parametros.prioridadPorSemestreActual
-        horario.elegirSalonExclusivo = parametros.elegirSalonExclusivo
-        horario.docentesenHorarioLaboral = parametros.docentesenHorarioLaboral
+        horario.prioridad_semestre_ascendente = parametros.prioridadPorSemestreAscendente
+        horario.prioridad_semestre_descendente = parametros.prioridadPorSemestreDescendente
+        horario.prioridad_demanda = parametros.prioridadPorDemanda
+        horario.prioridad_semestre_actual = parametros.prioridadPorSemestreActual
+        horario.elegir_salon_exclusivo = parametros.elegirSalonExclusivo
+        horario.docente_horariolaboral = parametros.docentesenHorarioLaboral
         horario.capacidadSalon = parametros.capacidadSalon
         horario.save()
 
