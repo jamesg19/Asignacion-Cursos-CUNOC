@@ -1,19 +1,19 @@
 class ParemetrosOBJ:
 
-    def __init__(self, nombreHorario, semestre, ciclo, cantMinima, edificioId,
-                 prioridadPorSemestreAscendente, prioridadPorSemestreDescendente,
-                 prioridadPorDemanda, prioridadPorSemestreActual, elegirSalonExclusivo,
-                 docentesenHorarioLaboral, capacidadSalon):
-        self.nombreHorario = nombreHorario
+    def __init__(self, nombre, semestre, ciclo, cantidad_minima, edificio_id,
+                 prioridad_semestre_ascendente, prioridad_semestre_descendente,
+                 prioridad_demanda, prioridad_semestre_actual, elegir_salon_exclusivo,
+                 docente_horariolaboral, capacidadSalon):
+        self.nombre = nombre
         self.semestre = semestre
         self.ciclo = ciclo
-        self.cantMinima = cantMinima
-        self.edificioId = edificioId
+        self.cantidad_minima = cantidad_minima
+        self.edificio_id = edificio_id
 
-        self.prioridadPorSemestreAscendente = prioridadPorSemestreAscendente
-        self.prioridadPorSemestreDescendente = prioridadPorSemestreDescendente
-        self.prioridadPorDemanda = prioridadPorDemanda
-        self.prioridadPorSemestreActual = prioridadPorSemestreActual
-        self.elegirSalonExclusivo = elegirSalonExclusivo
-        self.docentesenHorarioLaboral = docentesenHorarioLaboral
+        self.prioridad_semestre_ascendente = prioridad_semestre_ascendente
+        self.prioridad_semestre_descendente = prioridad_semestre_descendente
+        self.prioridad_demanda = prioridad_demanda
+        self.prioridad_semestre_actual = prioridad_semestre_actual
+        self.elegir_salon_exclusivo = elegir_salon_exclusivo
+        self.docente_horariolaboral = docente_horariolaboral
         self.capacidadSalon = capacidadSalon

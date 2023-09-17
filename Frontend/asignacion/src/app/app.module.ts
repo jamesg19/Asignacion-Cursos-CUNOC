@@ -9,7 +9,7 @@ import { NavbarComponent } from './Components/navbar/navbar.component';
 import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ProcessComponent } from './Components/process/process.component';
 import { ParametrosComponent } from './Components/parametros/parametros.component'
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -27,7 +27,8 @@ import { ParametrosComponent } from './Components/parametros/parametros.componen
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule   
   ],
   
   providers: [],

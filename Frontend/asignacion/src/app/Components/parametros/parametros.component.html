@@ -1,16 +1,136 @@
+<form [formGroup]="parametrosForm" (ngSubmit)="onSubmit()">
 
-
-<div>
-    <form formGroup="parametrosForm" (ngSubmit)="onSubmit()">
-
-        <div formGroupName="parametro">
-
-            <input formControlName="nombreHorario" type="text" >
-
-
-            <button  class="btn btn-info"> Generar</button>
+<div class="container">
+    
+        <!-- Otros campos de formulario si los tienes -->
+        <div class="centered-content" formGroupName="parametro">
             
-        </div>
 
-    </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parametros</th>
+                        <th>Valores</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                            Nombre Horario
+                        </th>
+                        <th >
+                            <input type="text" id="nombre" formControlName="nombre">
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            Semestre
+                        </th>
+                        <th >
+                            <select ngModel  formControlName="semestre">
+                                <option [ngValue]="1" [selected]>1</option>
+                                <option [ngValue]="2" >2</option>
+                            </select>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            Ciclo
+                        </th>
+                        <th >
+                            <select ngModel  formControlName="ciclo">
+                                <option [ngValue]="2023" [selected] >2023</option>
+                                <option [ngValue]="2022" >2022</option>
+                                <option [ngValue]="2021" >2021</option>
+                                
+                            </select>
+                        </th>
+                    </tr>
+                    
+                    <tr>
+                        <th class="custom-tooltip">
+                            Cantidad minima:
+                            <span  class="tooltip-text"> Cantidad minima de estudiantes para la apertura de cursos pre-asignados</span>
+                        </th>
+                        <th >
+                            <input type="number" id="cantidad_minima"  formControlName="cantidad_minima">
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <th class="custom-tooltip">
+                            Edificio Id:
+                           
+                        </th>
+                        <th >
+                            <select ngModel  formControlName="edificio_id">
+                                <option [ngValue]="2023" [selected] >1</option>
+                                <option [ngValue]="2022" >2</option>
+                                <option [ngValue]="2021" >3</option>
+                                
+                            </select>
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <th class="custom-tooltip">
+                            Edificio Id:
+                           
+                        </th>
+                        <th >
+                            <select ngModel  formControlName="edificio_id">
+                                <option [ngValue]="1" [selected] >1</option>
+                                <option [ngValue]="2" >2</option>
+                                <option [ngValue]="3" >3</option>
+                                
+                            </select>
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <th class="custom-tooltip">
+                            Prioridad de asignacion:
+                           
+                        </th>
+                        <th >
+                            <select ngModel  formControlName="prioridad" required>
+                                <option [ngValue]="1" [selected] >Semestre actual</option>
+                                <option [ngValue]="2" >Semestre ascendente 1->10</option>
+                                <option [ngValue]="3" >Semestre descendente 10->1</option>
+                                <option [ngValue]="0" >Por Demanda de asignacion (Mayor a Menor)</option>
+                                
+                            </select>
+                        </th>
+                    </tr>
+
+
+
+
+
+
+
+
+                </tbody>
+            </table>
+
+            
+
+            
+
+
+      
+         
+            
+
+
+
+
+
+
+
+        </div>
+        
+      
 </div>
+<button class="btn btn-info"  type="submit">Enviar</button>
+</form>

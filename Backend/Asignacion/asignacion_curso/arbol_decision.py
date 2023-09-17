@@ -33,6 +33,7 @@ class ArbolDecision:
 
         docentesenHorarioLaboral = True
         capacidadSalon = True
+
         parametros= ParemetrosOBJ(nombreHorario, semestre, ciclo, cantMinima, edificioId,
                                   prioridadPorSemestreAscendente, prioridadPorSemestreDescendente,
                                   prioridadPorDemanda, prioridadPorSemestreActual,
