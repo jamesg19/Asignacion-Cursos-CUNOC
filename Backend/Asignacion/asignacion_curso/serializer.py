@@ -16,7 +16,7 @@ class PeriodosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Periodos
         fields = '__all__'
-        depth = 1
+        depth = 2
 
 class SalonesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,7 +28,7 @@ class HorariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Horarios
         fields = '__all__'
-        depth = 1
+        depth = 3
 
 class DocentesCursosSerializer(serializers.ModelSerializer):
     class Meta:

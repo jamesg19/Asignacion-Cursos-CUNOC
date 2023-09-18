@@ -82,7 +82,7 @@ export class ParametrosComponent {
     if (docente_horariolaboral==1){
       this.horario.docente_horariolaboral=true;
     }else{
-      this.horario.elegirSalonExclusivo=false;
+      this.horario.docente_horariolaboral=false;
     }
    
 

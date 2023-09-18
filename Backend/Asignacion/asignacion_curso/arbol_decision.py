@@ -341,7 +341,7 @@ class ArbolDecision:
                                                                                             horario, curso,
                                                                                             elegirSalonExclusivo)
             # 5 Verifica que no exista
-            id_docente_disponible = self.buscarDocente(listaCursosConDocentes, curso, periodoLibreInicioId, horario.id, parametros)
+            id_docente_disponible, disponible_en_horario_laboral = self.buscarDocente(listaCursosConDocentes, curso, periodoLibreInicioId, horario.id, parametros)
             if id_docente_disponible == None:
                 id_docente_disponible = None
 
@@ -355,7 +355,7 @@ class ArbolDecision:
                     break
 
                 self.guardarHorarioSalonCursoDocente(horario.id, curso.curso_id, id_docente_disponible, salonLibreId,
-                                                     "A", periodoLibreInicioId, periodoLibreFinId, carrera_id,curso.cantidad_asignados, capacidad_salon)
+                                                     "A", periodoLibreInicioId, periodoLibreFinId, carrera_id,curso.cantidad_asignados, capacidad_salon,disponible_en_horario_laboral)
                 #print("Termina de evaluar el curso... \n\n\n")
             else:
                 print("No se pudo asignar")
@@ -372,18 +372,37 @@ class ArbolDecision:
                         # verifica que este disponible en el periodo y clase
                         docenteDisponible = self.verificaDocenteDisponible(docente, periodoLibreInicioId, horarioId,
                                                                            curso.duracion_periodo)
+
+                        enHorarioLaboral = self.horarioLaboral(docente.id, periodoLibreInicioId,
+                                                               curso.duracion_periodo)
                         #verifica que el docente este en horario laboral
                         if parametros.docente_horariolaboral:
-                            enHorarioLaboral = self.horarioLaboral(docente.id, periodoLibreInicioId,
-                                                                   curso.duracion_periodo)
-                            if enHorarioLaboral:
-                                return docente.id
-                        else:
+
+                            flag=False
                             if docenteDisponible:
-                                return docente.id
+
+                                if enHorarioLaboral:
+                                    flag=True
+                                    return docente.id, flag
+                                else:
+                                    flag = False
+                                    return docente.id, flag
+
+                        else:
+                            flag = False
+                            if docenteDisponible:
+
+                                if enHorarioLaboral:
+                                    flag = True
+                                    return docente.id, flag
+                                else:
+                                    flag = False
+                                    return docente.id, flag
                 else:
                     # No tiene ningun docente
-                    return None
+                    return None, False
+        flag = False
+        return None, flag
 
     def verificaDocenteDisponible(self, docente, periodoidCurso, horarioId, duracion_curso):
 
@@ -488,30 +507,32 @@ class ArbolDecision:
             return False
 
     def guardarHorarioSalonCursoDocente(self, horario_id, curso_id, docente_id, salon_id, seccion,
-                                        periodo_inicio, periodo_fin, carrera_id,cantidad_asignados, capacidad_salon):
+                                        periodo_inicio, periodo_fin, carrera_id,cantidad_asignados, capacidad_salon,disponible_en_horario_laboral):
 
         duracion = periodo_fin - periodo_inicio + 1
 
         if periodo_fin > periodo_inicio:
             for i in range(0, duracion):
                 self.guardar(horario_id, curso_id, docente_id, salon_id, seccion,
-                             periodo_inicio + i, periodo_inicio + i, carrera_id,cantidad_asignados, capacidad_salon)
+                             periodo_inicio + i, periodo_inicio + i, carrera_id,cantidad_asignados, capacidad_salon,disponible_en_horario_laboral)
         else:
             self.guardar(horario_id, curso_id, docente_id, salon_id, seccion,
-                         periodo_inicio, periodo_fin, carrera_id,cantidad_asignados, capacidad_salon)
+                         periodo_inicio, periodo_fin, carrera_id,cantidad_asignados, capacidad_salon,disponible_en_horario_laboral)
 
     def horarioLaboral(self, docenteId, periodoId, duracion):
         docente = Docentes.objects.filter(id=docenteId)
         #print("Cantidad de docentes econtrados: " + str(len(docente)))
         if periodoId >= docente[0].periodo_inicio.id and (periodoId + (duracion - 1)) <= \
                 docente[0].periodo_fin.id:
+            print("En horario laboral "+" docente id:"+str(docenteId)+" periodo: "+str(periodoId)+" Incia: "+str(docente[0].periodo_inicio.id)+" Fianliza: "+str(docente[0].periodo_fin.id))
             #print("Dentro Horario Laboral")
             return True
         else:
             #print("Fuera Horario Laboral")
+            print("En horario laboral: " +" docente id:"+str(docenteId)+" periodo: "+str(periodoId)+" Incia: "+str(docente[0].periodo_inicio.id)+" Fianliza: "+str(docente[0].periodo_fin.id))
             return False
     def guardar(elf, horario_id, curso_id, docente_id, salon_id, seccion,
-                periodo_inicio, periodo_fin, carrera_id,cantidad_asignados, capacidad_salon):
+                periodo_inicio, periodo_fin, carrera_id,cantidad_asignados, capacidad_salon,disponible_en_horario_laboral):
         '''
         print("Guardando horario")
         print("horario_id:", horario_id)
@@ -536,5 +557,6 @@ class ArbolDecision:
         horario_curso_salon_docente.carrera_id = carrera_id
         horario_curso_salon_docente.capacidad= capacidad_salon
         horario_curso_salon_docente.asignados=cantidad_asignados
+        horario_curso_salon_docente.disponible_en_horario_laboral=disponible_en_horario_laboral
 
         horario_curso_salon_docente.save()

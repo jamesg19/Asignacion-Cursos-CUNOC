@@ -22,7 +22,7 @@
         <th >Horario</th>
         <ng-container *ngFor="let salones of salonesUnicos">
             <th class="custom-tooltip" >{{ salones?.nombre }}
-                <span  class="tooltip-text">{{ salones?.nombre }}<br>{{ salones?.capacidad }}<br> Eficacia: {{salones?.eficacia.toFixed(2)}}%</span>
+                <span  class="tooltip-text">{{ salones?.nombre }}<br>{{ salones?.capacidad }}<br>{{salones?.tipo_mobiliario.nombre}} Eficacia: {{salones?.eficacia.toFixed(2)}}%</span>
                 
             </th>
         </ng-container>
@@ -34,7 +34,7 @@
     <ng-container *ngFor="let periodos of periodosUnicos">
 
         <tr >
-            <th class="custom-tooltip"> {{periodos.hora_inicio}} {{periodos.hora_fin}}
+            <th class="custom-tooltip"> Periodo: {{periodos.id}} <br>{{periodos.hora_inicio}} {{periodos.hora_fin}}
                 <span  class="tooltip-text">
                     Eficacia: {{periodos.eficacia.toFixed(2)}}%
                 </span>
@@ -63,7 +63,7 @@
                             <th>
                                 <tr [style.color]="'orange'">{{ items.docente?.nombre }} {{ items.docente?.apellido }}</tr>
                             </th>
-                            <th class="custom-tooltip-alert" *ngIf="(items.capacidad <items.asignados) || (items.docente == null && items.curso?.id_curso != 0) ">
+                            <th class="custom-tooltip-alert" *ngIf="(items.capacidad <items.asignados) || (items.docente == null && items.curso?.id_curso != 0) || items.disponible_en_horario_laboral == false ">
                                 <img src="assets/img/error.png">
                                 <span  class="tooltip-text-alert">
                                     <ng-container *ngIf="items.capacidad <items.asignados">
@@ -71,7 +71,13 @@
                                         <br>
                                     </ng-container>
                                     <ng-container *ngIf="items.docente== null && items.curso?.id_curso != 0">
-                                        -No tiene docente
+                                        -No tiene docente 
+                                        <br>
+                                    </ng-container>
+                                    <ng-container *ngIf="items.disponible_en_horario_laboral == false && items.docente != null">
+                                        -Docente fuera de horario laboral<br>
+                                        Perioro Inicio: {{items.docente?.periodo_inicio}}<br>
+                                        Perioro Fin: {{items.docente?.periodo_fin}}<br>
                                     </ng-container>
                                 </span>
                             </th>

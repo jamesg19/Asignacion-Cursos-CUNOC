@@ -39,6 +39,7 @@ def SimularHorario(request):
         try:
             objeto_python = json.loads(request.body)
             #objeto_python = json.loads(data)
+            print(objeto_python)
             horario=Horarios
             horario.nombre=objeto_python["nombre"]
             horario.semestre = objeto_python["semestre"]
@@ -98,6 +99,7 @@ class SalonesEdificio(generics.ListCreateAPIView):
 class HorariosParametros(generics.ListCreateAPIView):
     serializer_class = HorariosSerializer
 
+
     def get_queryset(self):
         print("ENTRA EN parametros...")
         horario_id = self.kwargs.get('horario_id')
@@ -113,4 +115,13 @@ class ListSchedulee(generics.ListCreateAPIView):
 
         queryset = Horarios.objects.all()
         print(queryset)
+        return queryset
+
+class DeleteHorario(generics.ListCreateAPIView):
+    serializer_class = HorariosSerializer
+
+    def get_queryset(self):
+        horario_id = self.kwargs.get('horario_id')
+        queryset = Horarios.objects.filter(id=horario_id)
+        queryset.delete()
         return queryset

@@ -129,6 +129,7 @@ class HorarioCursos(models.Model):
     carrera = models.ForeignKey(Carreras, models.DO_NOTHING)
     asignados = models.IntegerField()
     capacidad = models.IntegerField()
+    disponible_en_horario_laboral = models.IntegerField()
 
     class Meta:
         managed = False

@@ -20,7 +20,21 @@ export class ListScheduleComponent {
   }
 
   eliminarHorario(id:number){
-    //window.open(this.baseUrl+"/schedulee/"+id, '_blank');
+    this.parametrosService.deleteHorario(id).subscribe(
+      data=>{
+        for(let item of this.horarios){
+          if(item.id==id){
+            this.horarios.splice(this.horarios.indexOf(item),1);
+          }
+
+        }
+        
+
+      }, 
+      error=>{
+       
+      }
+    )
   }
 
   getListSchedule(){

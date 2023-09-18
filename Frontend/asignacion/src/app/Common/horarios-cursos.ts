@@ -18,5 +18,6 @@ export class HorariosCursos {
     periodo_fin: Periodos;
     asignados: number;
     capacidad: number;
+    disponible_en_horario_laboral:boolean;
     
 }

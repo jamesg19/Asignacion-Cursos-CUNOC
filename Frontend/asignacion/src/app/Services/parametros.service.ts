@@ -11,24 +11,31 @@ import { Location } from '@angular/common';
 export class ParametrosService {
 
   private baseUrl=environment.MyAppApiUrl;
-  private scheduleURL=this.baseUrl
+  
 
 
   constructor(private httpClient: HttpClient) { }
 
   getParametrosHorario(id:number): Observable<Horarios> {
-    this.scheduleURL+='/schedulee/parametros/'+id;
-    return this.httpClient.get<Horarios>(this.scheduleURL);
+    let scheduleURL=this.baseUrl
+    scheduleURL+='/schedulee/parametros/'+id;
+    return this.httpClient.get<Horarios>(scheduleURL);
   }
 
   getSchedules(): Observable<Horarios[]> {
-    this.scheduleURL+='/schedulee/list_schedulee/';
-    return this.httpClient.get<Horarios[]>(this.scheduleURL);
+    let scheduleURL=this.baseUrl
+    scheduleURL+='/schedulee/list_schedulee/';
+    return this.httpClient.get<Horarios[]>(scheduleURL);
+  }
+  deleteHorario(id:number): Observable<any> {
+    let scheduleURL=this.baseUrl
+    scheduleURL+='/schedulee/delete_horario/'+id;
+    return this.httpClient.get<any>(scheduleURL);
   }
 
   simularConParametros(horarios:Horarios){
-    
-    const url=this.scheduleURL+'/simular/'
+    let scheduleURL=this.baseUrl
+    let url=scheduleURL+'/simular/'
     return this.httpClient.post<Horarios>(url,horarios);
   } 
 }

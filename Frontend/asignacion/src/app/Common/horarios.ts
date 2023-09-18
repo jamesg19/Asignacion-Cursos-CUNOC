@@ -12,4 +12,5 @@ export class Horarios {
     elegirSalonExclusivo: boolean;
     docente_horariolaboral: boolean;
     capacidadSalon: number;
+    
 }
