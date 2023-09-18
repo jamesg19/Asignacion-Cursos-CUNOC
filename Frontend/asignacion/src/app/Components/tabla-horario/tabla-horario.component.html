@@ -34,7 +34,7 @@
     <ng-container *ngFor="let periodos of periodosUnicos">
 
         <tr >
-            <th class="custom-tooltip"> Periodo: {{periodos.id}} <br>{{periodos.hora_inicio}} {{periodos.hora_fin}}
+            <th class="custom-tooltip"> {{periodos.hora_inicio}} {{periodos.hora_fin}}
                 <span  class="tooltip-text">
                     Eficacia: {{periodos.eficacia.toFixed(2)}}%
                 </span>
@@ -76,8 +76,8 @@
                                     </ng-container>
                                     <ng-container *ngIf="items.disponible_en_horario_laboral == false && items.docente != null">
                                         -Docente fuera de horario laboral<br>
-                                        Perioro Inicio: {{items.docente?.periodo_inicio}}<br>
-                                        Perioro Fin: {{items.docente?.periodo_fin}}<br>
+                                        Perioro Inicio: {{items.docente?.periodo_inicio.hora_inicio}}<br>
+                                        Perioro Fin: {{items.docente?.periodo_fin.hora_fin}}<br>
                                     </ng-container>
                                 </span>
                             </th>

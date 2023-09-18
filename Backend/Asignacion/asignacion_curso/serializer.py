@@ -11,7 +11,7 @@ class HorarioCursosSerializer(serializers.ModelSerializer):
     class Meta:
         model = HorarioCursos
         fields = '__all__'
-        depth = 1
+        depth = 2
 class PeriodosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Periodos
