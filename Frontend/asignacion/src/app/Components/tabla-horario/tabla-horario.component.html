@@ -43,10 +43,41 @@
                 <ng-container *ngFor="let items of horariosCursos">
                     <td [ngClass]="getClassForNombre(items.carrera?.id)" *ngIf="items.periodo_inicio.id == periodos.id && salones.id == items.salon.id">
                         
-                        <tr [style.color]="'green'" *ngIf="items.curso?.id_curso !=0">{{items.curso?.id_curso}}</tr>
-                        <tr  [style.color]="'red'">{{ items.curso?.numero_semestre }}</tr>
-                        <tr>{{ items.curso?.nombre_curso }}</tr>
-                        <tr [style.color]="'orange'">{{ items.docente?.nombre }} {{ items.docente?.apellido }}</tr>
+                        <tr [style.color]="'green'" *ngIf="items.curso?.id_curso !=0">
+                            <th>{{items.curso?.id_curso}}</th>
+                            <th [style.color]="'red'">{{ items.curso?.numero_semestre }}</th>
+                            
+
+                        </tr>
+                        <tr>
+                            <th>
+                                {{ items.curso?.nombre_curso }}
+                            </th>
+                            <th >
+                                {{items.asignados}}
+
+                            </th>
+                        </tr>
+            
+                        <tr>
+                            <th>
+                                <tr [style.color]="'orange'">{{ items.docente?.nombre }} {{ items.docente?.apellido }}</tr>
+                            </th>
+                            <th class="custom-tooltip-alert" *ngIf="(items.capacidad <items.asignados) || (items.docente == null && items.curso?.id_curso != 0) ">
+                                <img src="assets/img/error.png">
+                                <span  class="tooltip-text-alert">
+                                    <ng-container *ngIf="items.capacidad <items.asignados">
+                                        -Se supero la capacidad del salon
+                                        <br>
+                                    </ng-container>
+                                    <ng-container *ngIf="items.docente== null && items.curso?.id_curso != 0">
+                                        -No tiene docente
+                                    </ng-container>
+                                </span>
+                            </th>
+
+                        </tr>
+                        
                         
                         
                     </td>

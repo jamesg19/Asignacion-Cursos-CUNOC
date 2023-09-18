@@ -21,6 +21,11 @@ export class ParametrosService {
     return this.httpClient.get<Horarios>(this.scheduleURL);
   }
 
+  getSchedules(): Observable<Horarios[]> {
+    this.scheduleURL+='/schedulee/list_schedulee/';
+    return this.httpClient.get<Horarios[]>(this.scheduleURL);
+  }
+
   simularConParametros(horarios:Horarios){
     
     const url=this.scheduleURL+'/simular/'

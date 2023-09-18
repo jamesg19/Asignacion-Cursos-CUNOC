@@ -10,6 +10,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ProcessComponent } from './Components/process/process.component';
 import { ParametrosComponent } from './Components/parametros/parametros.component'
 import { ReactiveFormsModule } from '@angular/forms';
+import { ListScheduleComponent } from './Components/list-schedule/list-schedule.component';
 
 
 
@@ -20,7 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     TablaHorarioComponent,
     NavbarComponent,
     ProcessComponent,
-    ParametrosComponent
+    ParametrosComponent,
+    ListScheduleComponent
   ],
   imports: [
 

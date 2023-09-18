@@ -1,0 +1,42 @@
+
+<div class="container">
+    <br><br><br><br><br>
+        <!-- Otros campos de formulario si los tienes -->
+
+    <div class="centered-content" >
+        <h2>Mis Horarios simulados</h2>
+        <br>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#ID</th>
+                <th scope="col">Nombre</th>
+                <th>Ciclo</th>
+                <th>Semestre</th>
+                <th>Cantidad minima alumnos</th>
+                <th scope="col">Parametros</th>
+                <th scope="col">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of horarios">
+                <th scope="row">{{item.id}}</th>
+                <td>{{item.nombre}}</td>
+                <td>{{item.ciclo}}</td>
+                <td>{{item.semestre}}</td>
+                <td>{{item.cantidad_minima}}</td>
+                <td>    Prioridad semestre ascendente: {{item.prioridad_semestre_ascendente ? 'True' : 'False'}}<br>
+                    Prioridad semestre descendente: {{item.prioridad_semestre_descendente ? 'True' : 'False'}}<br>
+                    Prioridad por demanda: {{item.prioridad_demanda ? 'True' : 'False'}}<br>
+                    Prioridad por semestre actual: {{item.prioridad_semestre_actual ? 'True' : 'False'}}<br>
+                </td>
+                <td>
+                    <button type="button" (click)="verHorario(item.id)"   class="btn btn-success">Ver</button>
+                    <button type="button"  (click)="eliminarHorario(item.id)" class="btn btn-danger">Eliminar</button>
+                </td>
+            </tr>
+            
+            </tbody>
+        </table>
+    </div>
+</div>

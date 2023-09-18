@@ -29,10 +29,17 @@ class ArbolDecision:
         prioridadPorSemestreDescendente = horario.prioridad_semestre_descendente
         prioridadPorDemanda = horario.prioridad_demanda
         prioridadPorSemestreActual = horario.prioridad_semestre_actual
-
+        print(prioridadPorSemestreAscendente)
+        print(prioridadPorSemestreDescendente)
+        print()
+        print(prioridadPorDemanda)
+        print(prioridadPorSemestreActual)
         elegirSalonExclusivo = horario.elegirSalonExclusivo
 
+
         docentesenHorarioLaboral = horario.docente_horariolaboral
+        print(elegirSalonExclusivo)
+        print(docentesenHorarioLaboral)
         capacidadSalon = True
 
         parametros= ParemetrosOBJ(nombreHorario, semestre, ciclo, cantMinima, edificioId,
@@ -129,7 +136,7 @@ class ArbolDecision:
         cursos = Cursos.objects.all()
         # docentes_relacionados = DocentesCursos.objects.all()
         docentesList = Docentes.objects.all()
-        print(len(docentesList))
+        #print(len(docentesList))
         for curso in cursos:
             docentes_relacionados = DocentesCursos.objects.filter(curso=curso)
 
@@ -153,7 +160,7 @@ class ArbolDecision:
                 "docentes": docentes_array
             }
             cursos_con_docentes.append(curso_con_docente)
-        print(cursos_con_docentes)
+        #print(cursos_con_docentes)
         for item in cursos_con_docentes:
             curso = CursoOBJ(item['curso_id'], item['nombre_curso'], "", item['numero_semestre'],
                              item["duracion_periodo"])
@@ -172,8 +179,8 @@ class ArbolDecision:
         salones=""
         if prioridadPorDemanda:
             salones = Salones.objects.filter(edificio_id=idEdificio, disponible=1).order_by('-capacidad')
-            for sal in salones:
-                print("Salon: "+sal.nombre +" capacidad: "+ str(sal.capacidad))
+            #for sal in salones:
+                #print("Salon: "+sal.nombre +" capacidad: "+ str(sal.capacidad))
         else:
             salones = Salones.objects.filter(edificio_id=idEdificio, disponible=1)
 
@@ -214,7 +221,7 @@ class ArbolDecision:
             return True
 
         else:
-            print("NO HAY NADA EN EL SALON_ID en reservados CURSOS-SALONES/*/*/*/*" + str(salon_id))
+            #print("NO HAY NADA EN EL SALON_ID en reservados CURSOS-SALONES/*/*/*/*" + str(salon_id))
             return False
 
     def periodosClases(self, edificio_id):
@@ -225,19 +232,18 @@ class ArbolDecision:
                             prioridadPorSemestreActual, semestre):
         cursos_ordenados = []
         if prioridadPorSemestreAscendente:
-            print("prioridadPorSemestreAscendente")
+            #print("prioridadPorSemestreAscendente")
             cursos_ordenados = sorted(lista_Cursos_Min_Estudiantes, key=lambda curso: (curso.numero_semestre))
 
         elif prioridadPorSemestreDescendente:
-            print("prioridadPorSemestreDescendente")
+            #print("prioridadPorSemestreDescendente")
             cursos_ordenados = sorted(lista_Cursos_Min_Estudiantes, key=lambda curso: (curso.numero_semestre), reverse=True)
 
         elif prioridadPorDemanda:
-            print("prioridadPorDemanda")
+            #print("prioridadPorDemanda")
             cursos_ordenados = sorted(lista_Cursos_Min_Estudiantes, key=lambda curso: (curso.cantidad_asignados),
                                       reverse=True)
-            for item in cursos_ordenados:
-                print("Curso: "+item.nombre_curso+" asignados:"+str(item.cantidad_asignados))
+
 
         elif prioridadPorSemestreActual:
 
@@ -245,9 +251,13 @@ class ArbolDecision:
 
                 cursos_ordenados = sorted(lista_Cursos_Min_Estudiantes,
                                           key=lambda curso: (curso.numero_semestre % 2 == 0, curso.numero_semestre))
+                for item in cursos_ordenados:
+                    print("Curso: " + item.nombre_curso + " Semestre"+str(item.numero_semestre) + " asignados:" + str(item.cantidad_asignados))
             else:
                 cursos_ordenados = sorted(lista_Cursos_Min_Estudiantes,
                                           key=lambda curso: (curso.numero_semestre % 2, curso.numero_semestre))
+                for item in cursos_ordenados:
+                    print("Curso: " + item.nombre_curso + " asignados:" + str(item.cantidad_asignados))
         return cursos_ordenados
 
     def getCursosCarrera(self, min_estudiantes, edificioId):
@@ -289,9 +299,9 @@ class ArbolDecision:
         '''
         # 1 Buscar Salon optimo para cursos
         for curso in cursosOrdenadosPorPrioridad:
-            print("ID: " + str(curso.curso_id) + "Nombre: " + curso.nombre_curso + " Semestre: " + str(
-                curso.numero_semestre) + " Asignados: " + str(
-                curso.cantidad_asignados) + " Duracion_Periodos: " + str(curso.duracion_periodo))
+            #print("ID: " + str(curso.curso_id) + "Nombre: " + curso.nombre_curso + " Semestre: " + str(
+                #curso.numero_semestre) + " Asignados: " + str(
+                #curso.cantidad_asignados) + " Duracion_Periodos: " + str(curso.duracion_periodo))
 
             salones = []
 
@@ -300,7 +310,7 @@ class ArbolDecision:
             salonLibreId = 0
             # 2 Buscar si el curso tiene un salon especial
             if (elegirSalonExclusivo == True):
-                print("     Salon exclusivo activado")
+                #print("     Salon exclusivo activado")
                 salonesTmp = self.getSalonesExclusvos(curso.curso_id)
 
                 if len(salonesTmp) == 0:
@@ -309,7 +319,7 @@ class ArbolDecision:
                 for aula in salonesTmp:
 
                     if len(salonesTmp) > 0:
-                        print("     TIENE exclusivo---")
+                        #print("     TIENE exclusivo---")
 
                         aulaTmp = SalonesOBJ(aula.id, aula.nombre, aula.capacidad,
                                              aula.tipo_mobiliario, aula.disponible)
@@ -319,7 +329,7 @@ class ArbolDecision:
                         print("     NO TIENE exclusivo---")
 
             else:
-                print("     Salon exclusivo descativado")
+                #print("     Salon exclusivo descativado")
                 # print("Entra en else " + str(len(salones)))
                 salones = listaSalones;
 
@@ -327,7 +337,7 @@ class ArbolDecision:
 
             # 4 Verificar que el Salon Este disponible en el horario
             # print("Cantidad de salones: " + str(len(salones)))
-            periodoLibreInicioId, periodoLibreFinId, salonLibreId = self.buscarHorarioSalon(listaPeriodosClase, salones,
+            periodoLibreInicioId, periodoLibreFinId, salonLibreId, capacidad_salon = self.buscarHorarioSalon(listaPeriodosClase, salones,
                                                                                             horario, curso,
                                                                                             elegirSalonExclusivo)
             # 5 Verifica que no exista
@@ -345,8 +355,8 @@ class ArbolDecision:
                     break
 
                 self.guardarHorarioSalonCursoDocente(horario.id, curso.curso_id, id_docente_disponible, salonLibreId,
-                                                     "A", periodoLibreInicioId, periodoLibreFinId, carrera_id)
-                print("Termina de evaluar el curso... \n\n\n")
+                                                     "A", periodoLibreInicioId, periodoLibreFinId, carrera_id,curso.cantidad_asignados, capacidad_salon)
+                #print("Termina de evaluar el curso... \n\n\n")
             else:
                 print("No se pudo asignar")
 
@@ -385,10 +395,10 @@ class ArbolDecision:
                    horario_id=horarioId, docente_id=docente.id)
 
         if len(horarioTMP) == 0:
-            print("El DOCENTE TIENE LIBRE A ESA HORA :)")
+            #print("El DOCENTE TIENE LIBRE A ESA HORA :)")
             return True
         else:
-            print("Esta ocupado...")
+            #print("Esta ocupado...")
             return False
 
     ##mejora en iteracion de salones version 2.0 +
@@ -396,6 +406,7 @@ class ArbolDecision:
         periodoLibreInicioId = 0
         periodoLibreFinId = 0
         salonLibreId = 0
+        capacidad_salon=0
 
         for salonItem in salones:
             ###if salonItem.capacidad < curso.cantidad_asignados:
@@ -422,7 +433,7 @@ class ArbolDecision:
 
 
                 if len(horarioTMP) == 0:
-                    print("Hay libre")
+                    #print("Hay libre")
                     # Verifica que en el periodo no exista un curso del mismo semestre en los salones
                     if self.verificaCursosMismoSemestre(curso.numero_semestre, periodo.id, horario.id, curso.curso_id):
                         continue
@@ -432,6 +443,7 @@ class ArbolDecision:
                             continue
                         else:
                             periodoLibreInicioId = periodo.id
+                            capacidad_salon=salonItem.capacidad
                             periodoLibreFinId = (periodo.id + curso.duracion_periodo - 1)
                             salonLibreId = salonItem.id
                             flagSalon = True
@@ -441,7 +453,7 @@ class ArbolDecision:
 
             if flagSalon:
                 break
-        return periodoLibreInicioId, periodoLibreFinId, salonLibreId
+        return periodoLibreInicioId, periodoLibreFinId, salonLibreId,capacidad_salon
 
     def verificaCursosMismoSemestre(self, numero_semestre, periodoId, horarioId, cursoId):
         horarioTMP = HorarioCursos.objects.values("salon__id", "curso__nombre_curso",
@@ -455,18 +467,18 @@ class ArbolDecision:
         if len(horarioTMP) == 0:
             return False;
         else:
-            print(f"Hay del mismo semestre en el periodo:{periodoId}, semestre: {numero_semestre}")
+            #print(f"Hay del mismo semestre en el periodo:{periodoId}, semestre: {numero_semestre}")
 
             # Los cursos que hay en el mismo periodo
             for horarios in horarioTMP:
-                print(horarios)
+                #print(horarios)
                 #idCursoenHorario = horarios['curso__id_curso']
                 idCarreraHorario = horarios['carrera__id']
 
                 for item in CarreraCursoActual:
 
                     if item['carrera__id'] == idCarreraHorario:
-                        print("Cancela el curso debido a que es de la misma carrera o comparte carrera")
+                        #print("Cancela el curso debido a que es de la misma carrera o comparte carrera")
                         return True
 
                 #return False
@@ -476,30 +488,30 @@ class ArbolDecision:
             return False
 
     def guardarHorarioSalonCursoDocente(self, horario_id, curso_id, docente_id, salon_id, seccion,
-                                        periodo_inicio, periodo_fin, carrera_id):
+                                        periodo_inicio, periodo_fin, carrera_id,cantidad_asignados, capacidad_salon):
 
         duracion = periodo_fin - periodo_inicio + 1
 
         if periodo_fin > periodo_inicio:
             for i in range(0, duracion):
                 self.guardar(horario_id, curso_id, docente_id, salon_id, seccion,
-                             periodo_inicio + i, periodo_inicio + i, carrera_id)
+                             periodo_inicio + i, periodo_inicio + i, carrera_id,cantidad_asignados, capacidad_salon)
         else:
             self.guardar(horario_id, curso_id, docente_id, salon_id, seccion,
-                         periodo_inicio, periodo_fin, carrera_id)
+                         periodo_inicio, periodo_fin, carrera_id,cantidad_asignados, capacidad_salon)
 
     def horarioLaboral(self, docenteId, periodoId, duracion):
         docente = Docentes.objects.filter(id=docenteId)
-        print("Cantidad de docentes econtrados: " + str(len(docente)))
+        #print("Cantidad de docentes econtrados: " + str(len(docente)))
         if periodoId >= docente[0].periodo_inicio.id and (periodoId + (duracion - 1)) <= \
                 docente[0].periodo_fin.id:
-            print("Dentro Horario Laboral")
+            #print("Dentro Horario Laboral")
             return True
         else:
-            print("Fuera Horario Laboral")
+            #print("Fuera Horario Laboral")
             return False
     def guardar(elf, horario_id, curso_id, docente_id, salon_id, seccion,
-                periodo_inicio, periodo_fin, carrera_id):
+                periodo_inicio, periodo_fin, carrera_id,cantidad_asignados, capacidad_salon):
         '''
         print("Guardando horario")
         print("horario_id:", horario_id)
@@ -522,5 +534,7 @@ class ArbolDecision:
         horario_curso_salon_docente.periodo_inicio_id = periodo_inicio
         horario_curso_salon_docente.periodo_fin_id = periodo_fin
         horario_curso_salon_docente.carrera_id = carrera_id
+        horario_curso_salon_docente.capacidad= capacidad_salon
+        horario_curso_salon_docente.asignados=cantidad_asignados
 
         horario_curso_salon_docente.save()

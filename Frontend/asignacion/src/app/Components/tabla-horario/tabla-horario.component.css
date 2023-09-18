@@ -21,11 +21,42 @@
     transition: opacity 0.3s;
     
   }
-  
   .custom-tooltip:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
   }
+
+  .custom-tooltip-alert {
+    position: relative;
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+  }
+  
+  .tooltip-text-alert {
+    visibility: hidden;
+    width: 200px;
+    
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 1%;
+    left: 90%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    
+  }
+
+  .custom-tooltip-alert:hover .tooltip-text-alert {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  
+
   
   
   .punto_carrera_industrial {

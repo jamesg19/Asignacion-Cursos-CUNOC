@@ -105,3 +105,12 @@ class HorariosParametros(generics.ListCreateAPIView):
         queryset = Horarios.objects.filter(id=horario_id)
         print(queryset)
         return queryset
+
+class ListSchedulee(generics.ListCreateAPIView):
+    serializer_class = HorariosSerializer
+
+    def get_queryset(self):
+
+        queryset = Horarios.objects.all()
+        print(queryset)
+        return queryset

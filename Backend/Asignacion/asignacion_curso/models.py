@@ -127,6 +127,8 @@ class HorarioCursos(models.Model):
     periodo_inicio = models.ForeignKey('Periodos', models.DO_NOTHING, db_column='periodo_inicio')
     periodo_fin = models.ForeignKey('Periodos', models.DO_NOTHING, db_column='periodo_fin', related_name='horariocursos_periodo_fin_set')
     carrera = models.ForeignKey(Carreras, models.DO_NOTHING)
+    asignados = models.IntegerField()
+    capacidad = models.IntegerField()
 
     class Meta:
         managed = False

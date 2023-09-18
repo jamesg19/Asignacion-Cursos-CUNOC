@@ -164,7 +164,10 @@ CREATE TABLE horario_cursos (
     periodo_fin INT NOT NULL,
     carrera_id INT NOT NULL,
 
-    FOREIGN KEY (horario_id) REFERENCES horarios(id),
+    asignados INT NOT NULL,
+    capacidad INT NOT NULL,
+
+    FOREIGN KEY (horario_id) REFERENCES horarios(id) ON DELETE CASCADE,
     FOREIGN KEY (curso_id) REFERENCES cursos(id_curso),
     FOREIGN KEY (docente_id) REFERENCES docentes(id),
     FOREIGN KEY (salon_id) REFERENCES salones(id),

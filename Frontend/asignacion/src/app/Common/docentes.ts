@@ -1,5 +1,5 @@
 export class Docentes {
-    id: number;
+    id: number=0;
     nombre: string;
     apellido: string;
     horario_entrada: Date;

@@ -16,5 +16,7 @@ export class HorariosCursos {
     dias_semana: string;
     periodo_inicio: Periodos;
     periodo_fin: Periodos;
+    asignados: number;
+    capacidad: number;
     
 }
