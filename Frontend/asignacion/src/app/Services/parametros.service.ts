@@ -3,6 +3,7 @@ import { environment } from '../enviroments/enviroment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Horarios } from '../Common/horarios';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +11,19 @@ import { Horarios } from '../Common/horarios';
 export class ParametrosService {
 
   private baseUrl=environment.MyAppApiUrl;
-  private scheduleURL=this.baseUrl+'/schedulee/parametros/'
+  private scheduleURL=this.baseUrl
+
 
   constructor(private httpClient: HttpClient) { }
 
   getParametrosHorario(id:number): Observable<Horarios> {
-    this.scheduleURL+=id;
+    this.scheduleURL+='/schedulee/parametros/'+id;
     return this.httpClient.get<Horarios>(this.scheduleURL);
   }
+
+  simularConParametros(horarios:Horarios){
+    
+    const url=this.scheduleURL+'/simular/'
+    return this.httpClient.post<Horarios>(url,horarios);
+  } 
 }

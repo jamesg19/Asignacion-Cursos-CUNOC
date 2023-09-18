@@ -15,23 +15,24 @@ class ArbolDecision:
     def __init__(self):
         pass
 
-    def simular(self):
-        semestre = 1
-        ciclo = 2023
-        cantMinima = 12
-        edificioId = 1
-        nombreHorario = "Mi Horario prueba"
+    def simular(self,horario):
+        nombreHorario = horario.nombre
+        semestre = horario.semestre
+        ciclo = horario.ciclo
+        cantMinima = horario.cantidad_minima
+        edificioId = horario.edificio_id
+
 
         # Solo 1
         #OR
-        prioridadPorSemestreAscendente = False #ascendente 1->10
-        prioridadPorSemestreDescendente = False  # ascendente 10->1
-        prioridadPorDemanda = True
-        prioridadPorSemestreActual = False
+        prioridadPorSemestreAscendente = horario.prioridad_semestre_ascendente
+        prioridadPorSemestreDescendente = horario.prioridad_semestre_descendente
+        prioridadPorDemanda = horario.prioridad_demanda
+        prioridadPorSemestreActual = horario.prioridad_semestre_actual
 
-        elegirSalonExclusivo = True
+        elegirSalonExclusivo = horario.elegirSalonExclusivo
 
-        docentesenHorarioLaboral = True
+        docentesenHorarioLaboral = horario.docente_horariolaboral
         capacidadSalon = True
 
         parametros= ParemetrosOBJ(nombreHorario, semestre, ciclo, cantMinima, edificioId,
@@ -62,7 +63,7 @@ class ArbolDecision:
         horario_id = self.simularAsignacionCursos(parametros, listaCursosOrdenada, listaCursosConDocentes,
                                                   listaSalones, nombreHorario, listaPeriodosClase, elegirSalonExclusivo)
         #return json.dumps({"data": 1})
-        return json.dumps({"data": horario_id})
+        return horario_id
 
     '''
     Step 1 
@@ -268,18 +269,18 @@ class ArbolDecision:
 
         # guardar nombre del horario(Simulacion)
         horario = Horarios()
-        horario.nombre = parametros.nombreHorario
+        horario.nombre = parametros.nombre
 
         horario.semestre = parametros.semestre
         horario.ciclo = parametros.ciclo
-        horario.cantidad_minima = parametros.cantMinima
-        horario.edificio_id = parametros.edificioId
-        horario.prioridad_semestre_ascendente = parametros.prioridadPorSemestreAscendente
-        horario.prioridad_semestre_descendente = parametros.prioridadPorSemestreDescendente
-        horario.prioridad_demanda = parametros.prioridadPorDemanda
-        horario.prioridad_semestre_actual = parametros.prioridadPorSemestreActual
-        horario.elegir_salon_exclusivo = parametros.elegirSalonExclusivo
-        horario.docente_horariolaboral = parametros.docentesenHorarioLaboral
+        horario.cantidad_minima = parametros.cantidad_minima
+        horario.edificio_id = parametros.edificio_id
+        horario.prioridad_semestre_ascendente = parametros.prioridad_semestre_ascendente
+        horario.prioridad_semestre_descendente = parametros.prioridad_semestre_descendente
+        horario.prioridad_demanda = parametros.prioridad_demanda
+        horario.prioridad_semestre_actual = parametros.prioridad_semestre_actual
+        horario.elegir_salon_exclusivo = parametros.elegir_salon_exclusivo
+        horario.docente_horariolaboral = parametros.docente_horariolaboral
         horario.capacidadSalon = parametros.capacidadSalon
         horario.save()
 
@@ -362,7 +363,7 @@ class ArbolDecision:
                         docenteDisponible = self.verificaDocenteDisponible(docente, periodoLibreInicioId, horarioId,
                                                                            curso.duracion_periodo)
                         #verifica que el docente este en horario laboral
-                        if parametros.docentesenHorarioLaboral:
+                        if parametros.docente_horariolaboral:
                             enHorarioLaboral = self.horarioLaboral(docente.id, periodoLibreInicioId,
                                                                    curso.duracion_periodo)
                             if enHorarioLaboral:

@@ -1,13 +1,13 @@
 <form [formGroup]="parametrosForm" (ngSubmit)="onSubmit()">
 
 <div class="container">
-    
+    <br><br><br><br><br>
         <!-- Otros campos de formulario si los tienes -->
         <div class="centered-content" formGroupName="parametro">
             
 
-            <table>
-                <thead>
+            <table class="table">
+                <thead class="thead-dark">
                     <tr>
                         <th>Parametros</th>
                         <th>Valores</th>
@@ -27,7 +27,7 @@
                             Semestre
                         </th>
                         <th >
-                            <select ngModel  formControlName="semestre">
+                            <select class="custom-select" formControlName="semestre">
                                 <option [ngValue]="1" [selected]>1</option>
                                 <option [ngValue]="2" >2</option>
                             </select>
@@ -38,7 +38,7 @@
                             Ciclo
                         </th>
                         <th >
-                            <select ngModel  formControlName="ciclo">
+                            <select class="custom-select"  formControlName="ciclo">
                                 <option [ngValue]="2023" [selected] >2023</option>
                                 <option [ngValue]="2022" >2022</option>
                                 <option [ngValue]="2021" >2021</option>
@@ -59,29 +59,14 @@
 
                     <tr>
                         <th class="custom-tooltip">
-                            Edificio Id:
+                            Edificio:
                            
                         </th>
                         <th >
-                            <select ngModel  formControlName="edificio_id">
-                                <option [ngValue]="2023" [selected] >1</option>
-                                <option [ngValue]="2022" >2</option>
-                                <option [ngValue]="2021" >3</option>
-                                
-                            </select>
-                        </th>
-                    </tr>
-
-                    <tr>
-                        <th class="custom-tooltip">
-                            Edificio Id:
-                           
-                        </th>
-                        <th >
-                            <select ngModel  formControlName="edificio_id">
-                                <option [ngValue]="1" [selected] >1</option>
-                                <option [ngValue]="2" >2</option>
-                                <option [ngValue]="3" >3</option>
+                            <select class="custom-select" formControlName="edificio_id">
+                                <option [ngValue]="1" [selected] >Modulo G (Ingenieria Sistemas & Industrial)</option>
+                                <option [ngValue]="2" >Modulo 90 (Sin Datos)</option>
+                                <option [ngValue]="3" >Modulo E (Sin Datos)</option>
                                 
                             </select>
                         </th>
@@ -93,14 +78,56 @@
                            
                         </th>
                         <th >
-                            <select ngModel  formControlName="prioridad" required>
-                                <option [ngValue]="1" [selected] >Semestre actual</option>
-                                <option [ngValue]="2" >Semestre ascendente 1->10</option>
-                                <option [ngValue]="3" >Semestre descendente 10->1</option>
-                                <option [ngValue]="0" >Por Demanda de asignacion (Mayor a Menor)</option>
+                            <select class="custom-select" formControlName="prioridad" required>
+                                <option [ngValue]="1" [selected] >Semestre_actual</option>
+                                <option [ngValue]="2" >Semestre_ascendente_1->10</option>
+                                <option [ngValue]="3" >Semestre _descendente_10->1</option>
+                                <option [ngValue]="4" >Por Demanda de asignacion (Mayor a Menor)</option>
+                                
                                 
                             </select>
                         </th>
+                    </tr>
+                    <tr>
+                        <th class="custom-tooltip">
+                            Elegir salones exclusivos:
+                           
+                        </th>
+                        <th >
+                            <select  class="custom-select" formControlName="elegir_salon_exclusivo" required>
+                                <option [ngValue]="1" [selected] >True</option>
+                                <option [ngValue]="0" >False</option>
+                                
+                            </select>
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <th class="custom-tooltip">
+                            Elegir docentes en horario laboral:
+                           
+                        </th>
+                        <th >
+                            <select class="custom-select" formControlName="docente_horariolaboral" required>
+                                <option [ngValue]="1" [selected] >True</option>
+                                <option [ngValue]="0" >False</option>
+                                
+                            </select>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th><button class="btn btn-info"  type="submit">Enviar</button></th>
+                    </tr>
+                    
+                    <tr>
+                        <div *ngIf="flag == 1" class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Bien hecho!</h4>
+                            <p>La simulacion de tu horario ha sido generada exitosamente.</p>
+                            <hr>
+                            <p class="mb-0">A continuacion el link de tu horario: <a href="http://localhost:4200//schedule/{{idHorarioGenerado}}" target="_blank">Click aqui!</a></p>
+                          </div>
+
                     </tr>
 
 
@@ -117,7 +144,7 @@
 
             
 
-
+            
       
          
             
@@ -132,5 +159,5 @@
         
       
 </div>
-<button class="btn btn-info"  type="submit">Enviar</button>
+
 </form>

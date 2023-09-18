@@ -2,7 +2,7 @@ export class Horarios {
     id:number;
     nombre: string;
     semestre: number;
-    ciclo: string;
+    ciclo: number;
     cantidad_minima: number;
     edificio_id: number;
     prioridad_semestre_ascendente: boolean;

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Horarios } from 'src/app/Common/horarios';
+import { ParametrosService } from 'src/app/Services/parametros.service';
 import { FormValidators } from 'src/app/Validators/form-validators';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-parametros',
@@ -9,10 +12,15 @@ import { FormValidators } from 'src/app/Validators/form-validators';
 })
 export class ParametrosComponent {
 
-
+  flag:number=0;
   parametrosForm: FormGroup;
+  private horario:Horarios=new Horarios();
+  urlActual:string = ""
+  idHorarioGenerado:number=0;
 
-  constructor(private formBuilder: FormBuilder){
+  constructor(private formBuilder: FormBuilder,
+    private parametrosService: ParametrosService,
+    private location: Location){
     this.createForm();
 
   }
@@ -26,50 +34,13 @@ export class ParametrosComponent {
                                   [Validators.required, 
                                   Validators.minLength(2), 
                                   FormValidators.notOnlyWhitespace]),
-            semestre:  new FormControl('', 
-                                  [Validators.required, 
-                                  Validators.minLength(2), 
-                                  FormValidators.notOnlyWhitespace]),
-            ciclo:  new FormControl('', 
-                                  [Validators.required, 
-                                  Validators.minLength(2), 
-                                  FormValidators.notOnlyWhitespace]),
-            cantidad_minima:  new FormControl('', 
-                                  [Validators.required, 
-                                  Validators.minLength(2), 
-                                  FormValidators.notOnlyWhitespace]),
-            edificio_id:  new FormControl('', 
-                                  [Validators.required, 
-                                  Validators.minLength(2), 
-                                  FormValidators.notOnlyWhitespace]),
-            prioridad:  new FormControl('', 
-                                  [Validators.required, 
-                                  Validators.minLength(2), 
-                                  FormValidators.notOnlyWhitespace]), 
-                prioridad_semestre_ascendente:  new FormControl('', 
-                                      [Validators.required, 
-                                      Validators.minLength(2), 
-                                      FormValidators.notOnlyWhitespace]),
-                prioridad_semestre_descendente:  new FormControl('', 
-                                      [Validators.required, 
-                                      Validators.minLength(2), 
-                                      FormValidators.notOnlyWhitespace]),  
-                prioridad_demanda:  new FormControl('', 
-                                      [Validators.required, 
-                                      Validators.minLength(2), 
-                                      FormValidators.notOnlyWhitespace]),                      
-                prioridad_semestre_actual:  new FormControl('', 
-                                      [Validators.required, 
-                                      Validators.minLength(2), 
-                                      FormValidators.notOnlyWhitespace]),              
-            elegir_salon_exclusivo:  new FormControl('', 
-                                  [Validators.required, 
-                                  Validators.minLength(2), 
-                                  FormValidators.notOnlyWhitespace]),                      
-            docente_horariolaboral:  new FormControl('', 
-                                  [Validators.required, 
-                                  Validators.minLength(2), 
-                                  FormValidators.notOnlyWhitespace]),                       
+            semestre:  [1],
+            ciclo:  [2023],
+            cantidad_minima:  [5],
+            edificio_id:  [1],
+            prioridad:  [1]   ,      
+            elegir_salon_exclusivo:  [1],                    
+            docente_horariolaboral:  [1]                      
 
 
 
@@ -82,16 +53,101 @@ export class ParametrosComponent {
   }
 
   onSubmit(){
+    this.urlActual = this.location.path();
+    this.flag=0;
+    //alert(this.parametrosForm.get('parametro.nombre').value)
+    let nombre:string=this.parametrosForm.get('parametro.nombre').value
+    let semestre:number=+this.parametrosForm.get('parametro.semestre').value
+    let ciclo:number=+this.parametrosForm.get('parametro.ciclo').value
+    let cantidad_minima:number=+this.parametrosForm.get('parametro.cantidad_minima').value
+    let edificio_id:number=+this.parametrosForm.get('parametro.edificio_id').value
+    let prioridad:number=+this.parametrosForm.get('parametro.prioridad').value
+    let elegir_salon_exclusivo:number=+this.parametrosForm.get('parametro.elegir_salon_exclusivo').value
+    let docente_horariolaboral:number=+this.parametrosForm.get('parametro.docente_horariolaboral').value
 
-    
-    alert(this.parametrosForm.get('parametro.nombre'))
-    console.log("ENtraaaaa")
+    //Asignacion
+    this.horario.nombre=nombre;
+    this.horario.semestre=semestre;
+    this.horario.ciclo=ciclo;
+    this.horario.cantidad_minima=cantidad_minima;
+    this.horario.edificio_id=edificio_id;
+    this.validatePrioridad(+prioridad)
+
+    if (elegir_salon_exclusivo==1){
+      this.horario.elegirSalonExclusivo=true;
+    }else{
+      this.horario.elegirSalonExclusivo=false;
+    }
+
+    if (docente_horariolaboral==1){
+      this.horario.docente_horariolaboral=true;
+    }else{
+      this.horario.elegirSalonExclusivo=false;
+    }
+   
+
+    //impimir todas las variables declaradas
+    console.log("nombre: "+nombre)
+    console.log("semestre: "+semestre)
+    console.log("ciclo: "+ciclo)  
+    console.log("cantidad_minima: "+cantidad_minima)
+    console.log("edificio_id: "+edificio_id)  
+    console.log("prioridad: "+prioridad)  
+    console.log("elegir_salon_exclusivo: "+elegir_salon_exclusivo)
+    console.log("docente_horariolaboral: "+docente_horariolaboral)  
+
+
+
+    this.simular();
+
 
     /*if (this.parametrosForm.invalid) {
       this.parametrosForm.markAllAsTouched();
       return;
     }*/
-    return
+    
+  }
+  private simular(){
+    this.parametrosService.simularConParametros(this.horario).subscribe(
+      data=>{
+        this.flag=1;
+        this.idHorarioGenerado=data['id'];  
+        console.log("Simulacion exitosa")
+      }, 
+      error=>{
+        this.flag=2;
+        console.log("Simulacion fallida")
+      }
+    )
+  }
+  private validatePrioridad(prioridad:number){
+
+    switch(prioridad){
+      case 1:
+        this.horario.prioridad_semestre_ascendente=false;
+        this.horario.prioridad_semestre_descendente=false;
+        this.horario.prioridad_demanda=false;
+        this.horario.prioridad_semestre_actual=true;
+        break;
+      case 2: 
+        this.horario.prioridad_semestre_ascendente=true;
+        this.horario.prioridad_semestre_descendente=false;
+        this.horario.prioridad_demanda=false;
+        this.horario.prioridad_semestre_actual=false;
+        break;
+      case 3: 
+        this.horario.prioridad_semestre_ascendente=false;
+        this.horario.prioridad_semestre_descendente=true;
+        this.horario.prioridad_demanda=false;
+        this.horario.prioridad_semestre_actual=false;
+        break;
+      case 4: 
+        this.horario.prioridad_semestre_ascendente=false;
+        this.horario.prioridad_semestre_descendente=false;
+        this.horario.prioridad_demanda=true;
+        this.horario.prioridad_semestre_actual=false;
+        break;
+    }
   }
 
 }
