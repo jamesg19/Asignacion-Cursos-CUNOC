@@ -50,7 +50,7 @@ def SimularHorario(request):
             horario.prioridad_semestre_descendente = objeto_python["prioridad_semestre_descendente"]
             horario.prioridad_demanda = objeto_python["prioridad_demanda"]
             horario.prioridad_semestre_actual = objeto_python["prioridad_semestre_actual"]
-            horario.elegirSalonExclusivo = objeto_python["elegirSalonExclusivo"]
+            horario.elegirSalonExclusivo = objeto_python["elegir_salon_exclusivo"]
             horario.docente_horariolaboral = objeto_python["docente_horariolaboral"]
 
             arbol = ArbolDecision()

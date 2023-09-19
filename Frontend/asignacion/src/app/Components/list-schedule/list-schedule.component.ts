@@ -42,6 +42,7 @@ export class ListScheduleComponent {
       data=>{
         
         this.horarios=data;
+        console.log(data)
 
       }, 
       error=>{

@@ -9,7 +9,7 @@ export class Horarios {
     prioridad_semestre_descendente: boolean;
     prioridad_demanda: boolean;
     prioridad_semestre_actual: boolean;
-    elegirSalonExclusivo: boolean;
+    elegir_salon_exclusivo: boolean;
     docente_horariolaboral: boolean;
     capacidadSalon: number;
     

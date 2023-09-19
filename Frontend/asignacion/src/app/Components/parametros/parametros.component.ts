@@ -74,9 +74,9 @@ export class ParametrosComponent {
     this.validatePrioridad(+prioridad)
 
     if (elegir_salon_exclusivo==1){
-      this.horario.elegirSalonExclusivo=true;
+      this.horario.elegir_salon_exclusivo=true;
     }else{
-      this.horario.elegirSalonExclusivo=false;
+      this.horario.elegir_salon_exclusivo=false;
     }
 
     if (docente_horariolaboral==1){

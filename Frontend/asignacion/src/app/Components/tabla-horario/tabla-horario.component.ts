@@ -28,6 +28,13 @@ export class TablaHorarioComponent {
   private listHorariosLibres:HorariosCursos[]=[];
   periodosUnicos:Periodos[]=[]
   idHorario: number 
+
+  eficaciaPromedioSalones:number=0;
+  eficaciaPromedioPeriodos:number=0;
+  eficaciaPromedioCursosConDocentes:number=0;
+  eficaciaDocenteHorarioLaboral:number=0;
+  eficaciaTotal:number=0;
+
   
 
 
@@ -89,7 +96,10 @@ export class TablaHorarioComponent {
   }
 
   private eficacia(){
-
+    let tempSalon:number=0;
+    let contadorSalon:number=0;
+    let tempPeriodo:number=0;
+    let contadorPeriodo:number=0;
     //salones
     for (let i =0;i<this.salonesUnicos.length;i++){
   
@@ -99,15 +109,33 @@ export class TablaHorarioComponent {
 
       this.salonesUnicos[i].eficacia= (  (salonesOcupados.length)/(this.periodosUnicos.length)  )*100
       this.salonesUnicos[i].eficacia.toFixed(2)
+      let temp=this.salonesUnicos[i].eficacia
+      if (temp>0){
+        tempSalon=tempSalon+temp;
+        contadorSalon+=1;
+      }
+      //this.salonesUnicos[i].eficacia.toFixed(2)
+      tempSalon.toFixed(2)
     }
+    this.eficaciaPromedioSalones= (tempSalon/contadorSalon)
+    this.eficaciaPromedioSalones.toFixed(2) 
 
     //periodos
     for (let i =0;i<this.periodosUnicos.length;i++){
       const periodosOcupados=this.horariosCursos.filter(horario => horario.periodo_inicio.id === this.periodosUnicos[i].id && horario.id !== 0)
 
       this.periodosUnicos[i].eficacia= (  (periodosOcupados.length)/(this.salonesUnicos.length)  )*100
+      this.periodosUnicos[i].eficacia.toFixed(2)
+      if(this.periodosUnicos[i].eficacia>0 ){
+        tempPeriodo+= this.periodosUnicos[i].eficacia
+        contadorPeriodo+=1;
+      }
+     
       
     }
+    this.eficaciaPromedioPeriodos=tempPeriodo/contadorPeriodo
+    this.eficaciaPromedioPeriodos.toFixed(2)
+    this.eficaciaTotal=(this.eficaciaPromedioSalones+this.eficaciaPromedioPeriodos+this.eficaciaPromedioCursosConDocentes+this.eficaciaDocenteHorarioLaboral)/4
     console.log("sale")
   }
 
@@ -120,12 +148,37 @@ export class TablaHorarioComponent {
         //console.log("HorariosCursos: "+this.horariosCursos);
         this.procesarDatos();
         this.eficacia();
+        this.ajustarTabla();
       });
 
   }
 
 
   private procesarDatos(){
+
+    let tempConDocente:number=0;
+    let tempHorrioLaboral:number=0;
+
+    this.horariosCursos.forEach(item => {
+      if(item.docente !== null ){
+        //if(item.docente?.id !== 0){
+          tempConDocente+=1;
+        //}
+        
+      }
+      if(item.disponible_en_horario_laboral == true){
+        tempHorrioLaboral+=1;
+      }
+      console.log()
+    });
+    this.eficaciaPromedioCursosConDocentes=(tempConDocente/this.horariosCursos.length)*100;
+    this.eficaciaPromedioCursosConDocentes.toFixed(2);
+
+    this.eficaciaDocenteHorarioLaboral=(tempHorrioLaboral/this.horariosCursos.length)*100;
+    this.eficaciaDocenteHorarioLaboral.toFixed(2);
+
+
+
     
     //Eje X
     for (let i = 0; i < this.salonesUnicos.length; i++) {
@@ -144,19 +197,6 @@ export class TablaHorarioComponent {
             //console.log("   Hay libre en: \nSalon: "+this.salonesUnicos[i].id+" Periodo: "+this.periodosUnicos[j].id)
             this.crearLibre(i,j);
           }
-          /*
-          let periodoTmp=this.horariosCursos.find(horario => horario.periodo_inicio.id === this.periodosUnicos[j].id )
-          let salonTmp=this.horariosCursos.find(horario => horario.salon.id === this.salonesUnicos[i].id )
-
-          if (!periodoTmp && salonTmp){
-
-            console.log("   Hay libre en: \nSalon: "+this.salonesUnicos[i].id+" Periodo: "+this.periodosUnicos[j].id)
-          }
-          if (!salonTmp && periodoTmp){
-
-            console.log("   Hay libre en: \nSalon: "+this.salonesUnicos[i].id+" Periodo: "+this.periodosUnicos[j].id)
-          }*/
-
         
       }
       
@@ -196,6 +236,7 @@ export class TablaHorarioComponent {
       horario.periodo_fin=periodo_inicio;
       horario.salon=salon;
       horario.curso=curso;
+      horario.docente=docente;
 
       this.listHorariosLibres.push(horario);
       this.horariosCursos.push(horario);
@@ -222,7 +263,10 @@ export class TablaHorarioComponent {
 
 
 
+  private ajustarTabla(){
+    
 
+  }
 
   private processResult() {
     return data => {

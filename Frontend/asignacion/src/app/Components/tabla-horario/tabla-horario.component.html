@@ -22,7 +22,7 @@
         <th >Horario</th>
         <ng-container *ngFor="let salones of salonesUnicos">
             <th class="custom-tooltip" >{{ salones?.nombre }}
-                <span  class="tooltip-text">{{ salones?.nombre }}<br>{{ salones?.capacidad }}<br>{{salones?.tipo_mobiliario.nombre}} Eficacia: {{salones?.eficacia.toFixed(2)}}%</span>
+                <span  class="tooltip-text">{{ salones?.nombre }}<br>{{ salones?.capacidad }}<br>{{salones?.tipo_mobiliario.nombre}} Eficacia: {{salones?.eficacia}}%</span>
                 
             </th>
         </ng-container>
@@ -94,5 +94,55 @@
 
 
 </tbody>
-
 </table>
+<br>
+
+
+<table class="table table-dark" #tablaReport>
+    <thead> 
+        <tr>
+            <h2>Indicadores de eficiencia</h2>
+        </tr>
+        <tr>
+          
+            <th>
+                Eficacia Promedio utilizacion de Salones
+            </th>
+            <th>
+                Eficiencia Promedio utilizacion de Periodos
+            </th>
+            <th>
+                Eficiencia de Cursos con Docentes
+            </th>
+            <th>
+                Eficacia de Docentes en Horario Laboral
+            </th>
+            <th>
+                Eficacia Total
+            </th>
+        </tr>
+
+    </thead>
+    <tbody>
+        <tr>
+            <th>
+                {{eficaciaPromedioSalones}}%
+            </th>
+            <th>
+                {{eficaciaPromedioPeriodos}}%
+            </th>
+            <th>
+                {{eficaciaPromedioCursosConDocentes}}%
+            </th>
+            <th>
+                {{eficaciaDocenteHorarioLaboral}}%
+            </th>
+            <th>
+                {{eficaciaTotal}}%
+            </th>
+        </tr>
+
+    </tbody>
+</table>
+
+
